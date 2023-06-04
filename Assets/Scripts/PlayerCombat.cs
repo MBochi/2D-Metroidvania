@@ -13,12 +13,15 @@ public class PlayerCombat : MonoBehaviour
     public int attackDamage = 40;
     public float attackRange = 1.1f;
 
+    private int maxHealth = 100;
+    private int currentHealth;
+
     public float attackRate = 2f;
     private float nextAttackTime = 0f;
     // Start is called before the first frame update
     void Start()
     {
-        
+        currentHealth = maxHealth;
     }
 
     // Update is called once per frame
@@ -47,6 +50,27 @@ public class PlayerCombat : MonoBehaviour
         {
             enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
         }
+    }
+
+    public virtual void TakeDamage(int damage)
+    {
+        if(currentHealth < 0) return; // temporary edit to disable player inputs
+        currentHealth -= damage;
+        animator.SetTrigger("Hurt");
+        Debug.Log("Player took Damage: " + damage);
+        if(currentHealth <= 0){
+            Die();
+            return;
+        }
+    }
+
+    protected virtual void Die()
+    {
+        animator.SetTrigger("Death");
+
+        GetComponent<Collider2D>().enabled = false;
+        this.enabled = false;
+        gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
     }
 
     private void OnDrawGizmosSelected() {

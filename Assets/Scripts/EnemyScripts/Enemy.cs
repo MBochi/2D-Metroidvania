@@ -9,12 +9,14 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int maxHealth = 100;
     protected int currentHealth;
     protected float aggroRange = 5f;
-    protected float attackRadius = 1.1f;
+    protected float attackRadius = .5f;
     protected float attackRange = 1.5f;
+    protected int attackDamage = 40;
     
 
     
     protected float attackRate = 1f;
+    protected float attackDelay = .5f;
     protected float nextAttackTime = 0f;
     protected bool isAttacking = false;
 
@@ -25,8 +27,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected Transform attackPoint;
     protected GameObject playerObj;
+    [SerializeField] protected LayerMask playerLayer;
 
-    [SerializeField] private LayerMask m_WhatIsGround;
+    [SerializeField] protected LayerMask m_WhatIsGround;
     const float k_CliffRadius = .2f;
     [SerializeField] protected bool m_FacingRight = false;
 
@@ -87,6 +90,9 @@ public abstract class Enemy : MonoBehaviour
         StartCoroutine(AttackCooldown());
         animator.SetBool("Attack", true);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+        StartCoroutine(AttackDelay());
+    
     }
     
     protected virtual void PatrolingMovement()
@@ -155,6 +161,7 @@ public abstract class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
+        Debug.Log("Enemy took Damage: " + damage);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         if(currentHealth <= 0){
             Die();
@@ -190,6 +197,24 @@ public abstract class Enemy : MonoBehaviour
         yield return new WaitForSeconds(attackRate);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         isAttacking = false;
+    }
+
+    protected virtual IEnumerator AttackDelay()
+    {
+        yield return new WaitForSeconds(attackDelay);
+        // Detect if player is in range of attack
+        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
+        bool playerWasHit = false;
+        // Damage the player
+        foreach (Collider2D player in hitPlayer)
+        {
+            playerWasHit = true;
+        }
+        if(playerWasHit)
+        {
+            playerObj.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
+        }
+        
     }
 
     private void OnDrawGizmosSelected() {
