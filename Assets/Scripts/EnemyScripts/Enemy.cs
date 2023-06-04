@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour
     protected float attackDelay = .5f;
     protected float nextAttackTime = 0f;
     protected bool isAttacking = false;
+    protected bool canStillDamagePlayer = true;
 
 
     protected Animator animator;
@@ -87,6 +88,7 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Attack()
     {  
         isAttacking = true;
+        canStillDamagePlayer = true;
         StartCoroutine(AttackCooldown());
         animator.SetBool("Attack", true);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
@@ -161,6 +163,7 @@ public abstract class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
+        canStillDamagePlayer = false;
         Debug.Log("Enemy took Damage: " + damage);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         if(currentHealth <= 0){
@@ -202,17 +205,21 @@ public abstract class Enemy : MonoBehaviour
     protected virtual IEnumerator AttackDelay()
     {
         yield return new WaitForSeconds(attackDelay);
-        // Detect if player is in range of attack
-        Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
-        bool playerWasHit = false;
-        // Damage the player
-        foreach (Collider2D player in hitPlayer)
+        
+        if(canStillDamagePlayer)
         {
-            playerWasHit = true;
-        }
-        if(playerWasHit)
-        {
-            playerObj.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
+            // Detect if player is in range of attack
+            Collider2D[] hitPlayer = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, playerLayer);
+            bool playerWasHit = false;
+            // Damage the player
+            foreach (Collider2D player in hitPlayer)
+            {
+                playerWasHit = true;
+            }
+            if(playerWasHit)
+            {
+                playerObj.GetComponent<PlayerCombat>().TakeDamage(attackDamage);
+            }
         }
         
     }
