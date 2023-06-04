@@ -35,6 +35,7 @@ Transform:
   m_Children:
   - {fileID: 3336595178300035949}
   - {fileID: 1061178382553980716}
+  - {fileID: 5494521233339917148}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -173,8 +174,10 @@ MonoBehaviour:
   movement_type: 1
   movementSpeed: 2
   maxHealth: 100
+  attackRate: 2
   cliffCheck: {fileID: 3336595178300035949}
   wallCheck: {fileID: 1061178382553980716}
+  attackPoint: {fileID: 5494521233339917148}
   m_WhatIsGround:
     serializedVersion: 2
     m_Bits: 1
@@ -209,6 +212,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3336595176824252183}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3914924694055849370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5494521233339917148}
+  m_Layer: 6
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5494521233339917148
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3914924694055849370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.452, y: 0.602, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3336595176824252183}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5009651520226734403
 GameObject:

@@ -9,13 +9,21 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] protected int maxHealth = 100;
     protected int currentHealth;
     protected float aggroRange = 5f;
+    protected float attackRadius = 1.1f;
+    protected float attackRange = 1.5f;
     
 
-    protected Vector3 currentTarget;
+    
+    protected float attackRate = 1f;
+    protected float nextAttackTime = 0f;
+    protected bool isAttacking = false;
+
+
     protected Animator animator;
     protected Rigidbody2D m_Rigidbody2D;
     [SerializeField] protected Transform cliffCheck;
     [SerializeField] protected Transform wallCheck;
+    [SerializeField] protected Transform attackPoint;
     protected GameObject playerObj;
 
     [SerializeField] private LayerMask m_WhatIsGround;
@@ -47,6 +55,14 @@ public abstract class Enemy : MonoBehaviour
 
         if(dist_to_player < aggroRange && x_direction_to_player < aggroRange) // aggro mode
         {
+            if(dist_to_player < attackRange)
+            {
+                if (!isAttacking)
+                {
+                    Attack();
+                    return;
+                }
+            }
             AggroMovement();
         }
         else // normal movement depending on settings
@@ -65,6 +81,14 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    protected virtual void Attack()
+    {  
+        isAttacking = true;
+        StartCoroutine(AttackCooldown());
+        animator.SetBool("Attack", true);
+        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+    }
+    
     protected virtual void PatrolingMovement()
     {
         animator.SetInteger("AnimState", 2); // run animation
@@ -160,5 +184,15 @@ public abstract class Enemy : MonoBehaviour
     protected virtual IEnumerator dmgCooldown(){
         yield return new WaitForSeconds(.4f);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
+
+    protected virtual IEnumerator AttackCooldown(){
+        yield return new WaitForSeconds(attackRate);
+        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        isAttacking = false;
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
 }
