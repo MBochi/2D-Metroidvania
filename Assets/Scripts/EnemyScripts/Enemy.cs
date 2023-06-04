@@ -111,7 +111,6 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void AggroMovement()
     {
-        Debug.Log(x_direction_to_player);
         if(x_direction_to_player > 0 && m_FacingRight) // Facing left and Player is left
         {
             m_Rigidbody2D.velocity = new Vector2(movementSpeed, m_Rigidbody2D.velocity.y);
