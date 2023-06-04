@@ -31,10 +31,6 @@ public class CharacterController2D : MonoBehaviour
 
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
-	private CameraFollowObject _cameraFollowObject;
-
-	[Header("Camera Settings")]
-	[SerializeField] private GameObject _cameraFollowGO;
 
 	private void Awake()
 	{
@@ -46,12 +42,6 @@ public class CharacterController2D : MonoBehaviour
 		if (OnCrouchEvent == null)
 			OnCrouchEvent = new BoolEvent();
 	}
-
-	/*
-	private void Start() {
-		_cameraFollowObject = _cameraFollowGO.GetComponent<CameraFollowObject>();
-	}
-	*/
 
 	private void FixedUpdate()
 	{
@@ -159,8 +149,6 @@ public class CharacterController2D : MonoBehaviour
 			transform.rotation = Quaternion.Euler(rotator);
 			// Switch the way the player is labelled as facing.
 			m_FacingRight = !m_FacingRight;
-
-			//_cameraFollowObject.CallTurn();
 		}
 
 		else
@@ -169,8 +157,6 @@ public class CharacterController2D : MonoBehaviour
 			transform.rotation = Quaternion.Euler(rotator);
 			// Switch the way the player is labelled as facing.
 			m_FacingRight = !m_FacingRight;
-
-			//_cameraFollowObject.CallTurn();
 		}
 	}
 }
