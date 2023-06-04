@@ -14,13 +14,13 @@ public abstract class Enemy : MonoBehaviour
     protected Vector3 currentTarget;
     protected Animator animator;
     protected Rigidbody2D m_Rigidbody2D;
-    protected Transform cliffCheck;
+    [SerializeField] protected Transform cliffCheck;
+    [SerializeField] protected Transform wallCheck;
     protected GameObject playerObj;
 
     [SerializeField] private LayerMask m_WhatIsGround;
     const float k_CliffRadius = .2f;
-    [SerializeField] protected bool m_FacingRight = true;
-    protected bool isIdle = false;
+    [SerializeField] protected bool m_FacingRight = false;
 
     protected float dist_to_player;
     protected float x_direction_to_player;
@@ -38,120 +38,93 @@ public abstract class Enemy : MonoBehaviour
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         playerObj = GameObject.FindWithTag("Player");
         currentHealth = maxHealth;
-        cliffCheck = this.transform.GetChild(0);
-
-        switch(movement_type)
-        {
-            case 0:
-            default:
-                isIdle = true;
-                break;
-            case 1:
-                isIdle = false;
-                break;
-        }
     }
 
-    // Update is called once per frame
     public virtual void Update()
     {
-        
         dist_to_player = Vector2.Distance(playerObj.transform.position, transform.position);
-        Movement();
-        Flip();
-    }
+        x_direction_to_player = playerObj.transform.position.x - transform.position.x;
 
-    public virtual void FixedUpdate()
-    {
-    
-    }
-
-    protected virtual void Movement()
-    {
-        
-        switch (movement_type)
+        if(dist_to_player < aggroRange && x_direction_to_player < aggroRange) // aggro mode
         {
-            case 0:
-            default:
-                MovementTypeDefault();
-                break;
-            case 1:
-                MovementType1();
-                break;
+            AggroMovement();
+        }
+        else // normal movement depending on settings
+        {
+            switch(movement_type)
+            {
+                default:
+                case 0:
+                    m_Rigidbody2D.velocity = new Vector2(0f, m_Rigidbody2D.velocity.y);
+                    animator.SetInteger("AnimState", 1); // idle animation
+                    break;
+                case 1:
+                    PatrolingMovement();
+                    break;
+            }
         }
     }
 
-
-    protected virtual void MovementTypeDefault()
+    protected virtual void PatrolingMovement()
     {
-        if(dist_to_player < aggroRange)
+        animator.SetInteger("AnimState", 2); // run animation
+        if(m_FacingRight)
         {
-            x_direction_to_player = playerObj.transform.position.x - transform.position.x;
-            isIdle = false;
-            animator.SetInteger("AnimState", 2);
-            if(x_direction_to_player < 0) // player is left of enemy 
-            {
-                m_Rigidbody2D.velocity = new Vector2(movementSpeed *-1f ,m_Rigidbody2D.velocity.y); 
-            }
-            else if(x_direction_to_player > 0) // player is right of enemy
-            {
-                m_Rigidbody2D.velocity = new Vector2(movementSpeed ,m_Rigidbody2D.velocity.y);
-            }
+            m_Rigidbody2D.velocity = new Vector2(movementSpeed, m_Rigidbody2D.velocity.y);
         }
         else
         {
-            m_Rigidbody2D.velocity = new Vector2(0f,0f);
-            animator.SetInteger("AnimState", 1); // run animation
+            m_Rigidbody2D.velocity = new Vector2(movementSpeed * -1, m_Rigidbody2D.velocity.y);
         }
 
-
-
-        if(x_direction_to_player < 0 && m_FacingRight)
+        if(!HasFloorInfront() || HasWallInfront())
         {
-            m_FacingRight = !m_FacingRight;
-        }
-        else if(x_direction_to_player > 0 && !m_FacingRight)
-        {
-            m_FacingRight = !m_FacingRight;
+            Flip();
         }
     }
 
-
-    protected virtual void MovementType1()
+    protected virtual bool HasFloorInfront()
     {
-        if(!isIdle)
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(cliffCheck.position, k_CliffRadius, m_WhatIsGround);
+        for (int i = 0; i < colliders.Length; i++)
         {
-            int idle_random = Random.Range(1,5000);
-            if (idle_random == 1)
+            if (colliders[i].gameObject != gameObject) // Turn Enemy if in front of a wall
             {
-                isIdle = true;
+                return true;
             }
+        }
+        return false;
+    }
 
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(cliffCheck.position, k_CliffRadius, m_WhatIsGround);
+    protected virtual bool HasWallInfront()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(wallCheck.position, k_CliffRadius, m_WhatIsGround);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i].gameObject != gameObject) // Turn Enemy if in front of a wall
+            {   
+                return true; 
+            }
+        }
+        return false;
+    }
 
-            for (int i = 0; i < colliders.Length; i++)
-            {
-                if (colliders[i].gameObject != gameObject) // Turn Enemy if in front of a cliff
-                {
-                    m_FacingRight = !m_FacingRight;
-                }
-            }
-
-            if(m_FacingRight == true) 
-            {
-                m_Rigidbody2D.velocity = new Vector2(movementSpeed, m_Rigidbody2D.velocity.y); 
-            }
-            else if(m_FacingRight == false)
-            {
-                m_Rigidbody2D.velocity = new Vector2(movementSpeed * -1, m_Rigidbody2D.velocity.y);
-            }
+    protected virtual void AggroMovement()
+    {
+        Debug.Log(x_direction_to_player);
+        if(x_direction_to_player > 0 && m_FacingRight) // Facing left and Player is left
+        {
+            m_Rigidbody2D.velocity = new Vector2(movementSpeed, m_Rigidbody2D.velocity.y);
             animator.SetInteger("AnimState", 2); // run animation
         }
-        else
+        else if(x_direction_to_player < 0 && !m_FacingRight) // facing right and Player is right
         {
-            animator.SetInteger("AnimState", 1); // idle animation
-            m_Rigidbody2D.velocity = new Vector2(0f, m_Rigidbody2D.velocity.y); 
-            StartCoroutine(idleCoolDown());
+            m_Rigidbody2D.velocity = new Vector2(movementSpeed * -1, m_Rigidbody2D.velocity.y);
+            animator.SetInteger("AnimState", 2); // run animation
+        }
+        else if ((x_direction_to_player > 0 && !m_FacingRight) || (x_direction_to_player < 0 && m_FacingRight)) // Player is in aggro range, but facing wrong direction
+        {
+            Flip();
         }
     }
 
@@ -169,41 +142,21 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-
         Debug.Log("Enemy died!");
         animator.SetTrigger("Death");
 
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-
     }
 
     protected virtual void Flip()
 	{
-        if(!isIdle)
-        {
-            if(m_FacingRight)         
-            {             
-                Vector3 rotator = new Vector3(transform.rotation.x, 180f, transform.rotation.z);
-                transform.rotation = Quaternion.Euler(rotator); // Switch the way the player is labelled as facing.             
-                m_FacingRight = !m_FacingRight;         
-            }          
-            else         
-            {             
-                Vector3 rotator = new Vector3(transform.rotation.x, 0f, transform.rotation.z);             
-                transform.rotation = Quaternion.Euler(rotator); // Switch the way the player is labelled as facing.            
-                m_FacingRight = !m_FacingRight;        
-            }
-        }
+        Vector2 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
+        m_FacingRight = !m_FacingRight;
 	}
-
-
-
-    protected virtual IEnumerator idleCoolDown(){
-        yield return new WaitForSeconds(3f);
-        isIdle = false;
-    }
 
     protected virtual IEnumerator dmgCooldown(){
         yield return new WaitForSeconds(.4f);
