@@ -22,7 +22,7 @@ public class Hazard : MonoBehaviour
             player.TakeDamage(damage);
             warpToSafeGround.WarpPlayerToSafeGround();
         }
-        else
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             Enemy enemy = collision.GetComponent<Enemy>();
             enemy.TakeDamage(damage);      

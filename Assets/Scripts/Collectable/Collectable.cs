@@ -9,6 +9,7 @@ public abstract class Collectable : MonoBehaviour
     protected float collectRange = 1f;
     protected bool canBeCollected = false;
     protected float pickupCooldown = 3f;
+    protected float despawnTime = 20f;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,5 +40,11 @@ public abstract class Collectable : MonoBehaviour
     protected virtual IEnumerator collectionCooldown(){
         yield return new WaitForSeconds(pickupCooldown);
         canBeCollected = true;
+        StartCoroutine(despawnTimer());
+    }
+
+    protected virtual IEnumerator despawnTimer(){
+        yield return new WaitForSeconds(despawnTime);
+        Destroy(this.gameObject);
     }
 }
