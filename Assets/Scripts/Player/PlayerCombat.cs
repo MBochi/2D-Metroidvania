@@ -79,7 +79,9 @@ public class PlayerCombat : MonoBehaviour
         animator.SetTrigger("Death");
 
         GetComponent<Collider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().enabled = false;
         this.enabled = false;
+        gameObject.GetComponent<PlayerMovement>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
     }
 

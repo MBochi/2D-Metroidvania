@@ -17546,6 +17546,7 @@ GameObject:
   - component: {fileID: 2020499593}
   - component: {fileID: 2020499594}
   - component: {fileID: 2020499595}
+  - component: {fileID: 2020499596}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -17639,6 +17640,7 @@ MonoBehaviour:
   m_CeilingCheck: {fileID: 342251684}
   m_CrouchDisableCollider: {fileID: 2020499588}
   animator: {fileID: 2020499594}
+  m_Grounded: 0
   m_FacingRight: 1
   OnLandEvent:
     m_PersistentCalls:
@@ -17773,6 +17775,19 @@ MonoBehaviour:
   attackDamage: 40
   attackRange: 1.1
   attackRate: 2
+--- !u!114 &2020499596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2020499586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b0deec8c22905d4682b16859f760362, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveFrequency: 1
 --- !u!1001 &1630497255933739931
 PrefabInstance:
   m_ObjectHideFlags: 0
