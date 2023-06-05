@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3336595176824252179}
   - component: {fileID: 3336595176824252178}
   m_Layer: 6
-  m_Name: Bandit
+  m_Name: HeavyBandit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -174,7 +174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movement_type: 1
   movementSpeed: 2
-  maxHealth: 100
+  maxHealth: 200
+  attackDamage: 40
   cliffCheck: {fileID: 3336595178300035949}
   wallCheck: {fileID: 1061178382553980716}
   attackPoint: {fileID: 5494521233339917148}

@@ -11,7 +11,7 @@ public abstract class Enemy : MonoBehaviour
     protected float aggroRange = 5f;
     protected float attackRadius = .5f;
     protected float attackRange = 1.5f;
-    protected int attackDamage = 40;
+    [SerializeField] protected int attackDamage = 20;
     
 
     
@@ -19,6 +19,7 @@ public abstract class Enemy : MonoBehaviour
     protected float attackDelay = .5f;
     protected float nextAttackTime = 0f;
     protected bool isAttacking = false;
+    protected bool isDead = false;
     protected bool canStillDamagePlayer = true;
 
     protected float despawnTime = 3f;
@@ -52,7 +53,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Init()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
         playerObj = GameObject.FindWithTag("Player");
         currentHealth = maxHealth;
@@ -97,7 +98,7 @@ public abstract class Enemy : MonoBehaviour
         canStillDamagePlayer = true;
         StartCoroutine(AttackCooldown());
         animator.SetBool("Attack", true);
-        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        if (!isDead) m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
 
         StartCoroutine(AttackDelay());
     
@@ -171,7 +172,7 @@ public abstract class Enemy : MonoBehaviour
         animator.SetTrigger("Hurt");
         canStillDamagePlayer = false;
         Debug.Log("Enemy took Damage: " + damage);
-        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        if (!isDead) m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
         if(currentHealth <= 0){
             Die();
             return;
@@ -186,6 +187,7 @@ public abstract class Enemy : MonoBehaviour
 
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
+        isDead = true;
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 
         SpawnLoot();
@@ -240,7 +242,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual IEnumerator dmgCooldown(){
         yield return new WaitForSeconds(.4f);
-        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (!isDead) m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     protected virtual IEnumerator despawnCooldown(){
@@ -250,7 +252,7 @@ public abstract class Enemy : MonoBehaviour
 
     protected virtual IEnumerator AttackCooldown(){
         yield return new WaitForSeconds(attackRate);
-        m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+        if (!isDead) m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
         isAttacking = false;
     }
 

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HeavyBanditEnemy : Enemy
+public class LightBanditEnemy : Enemy
 {
     public override void Init()
     {

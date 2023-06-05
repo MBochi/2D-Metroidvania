@@ -8,7 +8,7 @@ public abstract class Collectable : MonoBehaviour
     protected GameObject playerObj;
     protected float collectRange = 1f;
     protected bool canBeCollected = false;
-    protected float pickupCooldown = 3f;
+    protected float pickupCooldown = 2f;
     protected float despawnTime = 20f;
     // Start is called before the first frame update
     void Start()
