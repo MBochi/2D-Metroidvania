@@ -21,14 +21,20 @@ public abstract class Enemy : MonoBehaviour
     protected bool isAttacking = false;
     protected bool canStillDamagePlayer = true;
 
+    protected float despawnTime = 3f;
+
 
     protected Animator animator;
     protected Rigidbody2D m_Rigidbody2D;
     [SerializeField] protected Transform cliffCheck;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected Transform attackPoint;
+    [SerializeField] protected Transform LootSpawnPoint;
     protected GameObject playerObj;
     [SerializeField] protected LayerMask playerLayer;
+
+    [SerializeField] protected GameObject coinPrefab;
+    [SerializeField] protected GameObject heartPrefab;
 
     [SerializeField] protected LayerMask m_WhatIsGround;
     const float k_CliffRadius = .2f;
@@ -181,6 +187,47 @@ public abstract class Enemy : MonoBehaviour
         GetComponent<Collider2D>().enabled = false;
         this.enabled = false;
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+
+        SpawnLoot();
+        StartCoroutine(despawnCooldown());
+    }
+
+    protected virtual void SpawnLoot()
+    {
+
+        // Coins
+        int coinAmount = Random.Range(0,10); // spawn 0-9 coins on death 
+        Debug.Log("Spawning " + coinAmount + " Coins");
+
+    
+
+        for(int i = 0; i < coinAmount; i++)
+        {
+            float xoffset = Random.Range(-1f,1f);
+            float yoffset = Random.Range(0f,1f);
+            GameObject coin = Instantiate(coinPrefab, new Vector3(LootSpawnPoint.transform.position.x + xoffset, LootSpawnPoint.transform.position.y + yoffset, LootSpawnPoint.transform.position.y), Quaternion.identity);
+            int xDirection = Random.Range(-3,4);
+            int yDirection = Random.Range(1,4);
+            coin.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDirection,yDirection),ForceMode2D.Impulse);
+            
+        }
+
+
+        int heartAmount = Random.Range(0,2); // spawn 0-9 coins on death 
+        Debug.Log("Spawning " + coinAmount + " hearts");
+
+    
+
+        for(int i = 0; i < heartAmount; i++)
+        {
+            float xoffset = Random.Range(-1f,1f);
+            float yoffset = Random.Range(0f,1f);
+            GameObject heart = Instantiate(heartPrefab, new Vector3(LootSpawnPoint.transform.position.x + xoffset, LootSpawnPoint.transform.position.y + yoffset, LootSpawnPoint.transform.position.y), Quaternion.identity);
+            int xDirection = Random.Range(-3,4);
+            int yDirection = Random.Range(1,4);
+            heart.GetComponent<Rigidbody2D>().AddForce(new Vector2(xDirection,yDirection),ForceMode2D.Impulse);
+            
+        }
     }
 
     protected virtual void Flip()
@@ -194,6 +241,11 @@ public abstract class Enemy : MonoBehaviour
     protected virtual IEnumerator dmgCooldown(){
         yield return new WaitForSeconds(.4f);
         m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+    }
+
+    protected virtual IEnumerator despawnCooldown(){
+        yield return new WaitForSeconds(despawnTime);
+        Destroy(this.gameObject);
     }
 
     protected virtual IEnumerator AttackCooldown(){

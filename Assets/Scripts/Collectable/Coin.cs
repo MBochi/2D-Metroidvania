@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Coin : Collectable
 {
-    private int coinValue = 5;
+    private int coinValue = 1;
 
     protected override void PlayerCollected()
     {
         base.PlayerCollected();
-        coinValue += 10; // Dummy
+        playerObj.GetComponent<Inventory>().AddMoney(coinValue);
     }
 }
