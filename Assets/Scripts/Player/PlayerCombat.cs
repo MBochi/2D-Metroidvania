@@ -40,7 +40,8 @@ public class PlayerCombat : MonoBehaviour
     private void Attack()
     {
         // Play an attack animation
-        animator.SetBool("Attack1", true);
+        int attackAnimationNumber = UnityEngine.Random.Range(1,4);
+        animator.SetBool("Attack" + attackAnimationNumber, true);
 
         // Detect enemies in range of attack
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
