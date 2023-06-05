@@ -17056,7 +17056,7 @@ GameObject:
   - component: {fileID: 1741566487}
   - component: {fileID: 1741566486}
   - component: {fileID: 1741566489}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Hazards
   m_TagString: Untagged
   m_Icon: {fileID: 0}
