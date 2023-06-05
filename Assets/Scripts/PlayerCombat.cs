@@ -52,7 +52,7 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(int damage)
+    public void TakeDamage(int damage)
     {
         if(currentHealth < 0) return; // temporary edit to disable player inputs
         currentHealth -= damage;
@@ -64,7 +64,17 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    protected virtual void Die()
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        Debug.Log("Player healed:" + amount);
+        if(currentHealth <= maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+    }
+
+    protected void Die()
     {
         animator.SetTrigger("Death");
 
