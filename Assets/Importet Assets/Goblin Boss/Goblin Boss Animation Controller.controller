@@ -572,7 +572,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0.0000000035666663
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -660,37 +660,37 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -2496385151748308923}
-    m_Position: {x: 200, y: 100, z: 0}
+    m_Position: {x: 90, y: -10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -4912191895548986356}
-    m_Position: {x: 500, y: -150, z: 0}
+    m_Position: {x: 500, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1469368774660449181}
-    m_Position: {x: 1140, y: -110, z: 0}
+    m_Position: {x: 1340, y: -60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1969660739898665488}
-    m_Position: {x: 800, y: 290, z: 0}
+    m_Position: {x: 500, y: 60, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 116132054827547294}
-    m_Position: {x: 550, y: -370, z: 0}
+    m_Position: {x: 780, y: -210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 334334531447162568}
     m_Position: {x: 500, y: -40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7056204611449360431}
-    m_Position: {x: 750, y: 50, z: 0}
+    m_Position: {x: 760, y: 100, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7436978747907162708}
-    m_Position: {x: 980, y: 530, z: 0}
+    m_Position: {x: 640, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -1771537679339670806}
-    m_Position: {x: 190, y: -510, z: 0}
+    m_Position: {x: 590, y: -540, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4438492355165227291}
-    m_Position: {x: 500, y: 50, z: 0}
+    m_Position: {x: 500, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5163258098555137855}
-    m_Position: {x: 420, y: -270, z: 0}
+    m_Position: {x: 500, y: -210, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: -4790457299620849221}
@@ -704,9 +704,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 1020, y: -330, z: 0}
-  m_EntryPosition: {x: 220, y: 250, z: 0}
-  m_ExitPosition: {x: 1250, y: 10, z: 0}
+  m_AnyStatePosition: {x: 1070, y: -50, z: 0}
+  m_EntryPosition: {x: 100, y: 200, z: 0}
+  m_ExitPosition: {x: 1630, y: -50, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -2496385151748308923}
 --- !u!1101 &4263508154434171999
