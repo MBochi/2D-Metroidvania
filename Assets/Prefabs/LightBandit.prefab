@@ -100,7 +100,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3336595176824252177}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -175,6 +175,7 @@ MonoBehaviour:
   movement_type: 1
   movementSpeed: 2
   maxHealth: 100
+  attackDamage: 20
   cliffCheck: {fileID: 3336595178300035949}
   wallCheck: {fileID: 1061178382553980716}
   attackPoint: {fileID: 5494521233339917148}
