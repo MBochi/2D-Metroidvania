@@ -35,12 +35,12 @@ public class GoblinKingController : MonoBehaviour
     private bool canPanic = true;
     private float panicCooldownTime = 2f;
 
-
     private float m_JumpForce = 300f;
 
     private int maxHealth = 500;
     private int currentHealth;
     private int attackDamage = 25;
+    private float movementSpeed = 5f;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,13 +54,18 @@ public class GoblinKingController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
         sprite = GetComponent<SpriteRenderer>();
+        ToggleMovementFreeze(true);
 
         currentHealth = maxHealth;
     }
 
     private void FixedUpdate()
     {
-        GroundCheck();  
+        if(currentHealth > 0)
+        {
+            GroundCheck();
+        }
+          
     }
 
     // Update is called once per frame
@@ -69,6 +74,10 @@ public class GoblinKingController : MonoBehaviour
         if(currentHealth == 0)
         {
             Die();
+        }
+
+        if (currentHealth < 0)
+        {
             return;
         }
 
@@ -98,6 +107,19 @@ public class GoblinKingController : MonoBehaviour
         {
             Panic();
         }
+        if (Input.GetKeyDown("z"))
+        {
+            MoveLeft();
+        }
+        if (Input.GetKeyDown("u"))
+        {
+            MoveRight();
+        }
+        if (Input.GetKeyUp("z") || Input.GetKeyUp("u"))
+        {
+            StopMovement();
+        }
+        
 
 
         
@@ -146,6 +168,20 @@ public class GoblinKingController : MonoBehaviour
 		}
     }
 
+    private void ToggleMovementFreeze(bool freezeX)
+    {
+        if(freezeX)
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation | RigidbodyConstraints2D.FreezePositionX;
+        }
+        else
+        {
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        }
+
+
+    }
+
     public void TakeDamage(int damageAmount)
     {  
         if(currentHealth > 0)
@@ -158,6 +194,23 @@ public class GoblinKingController : MonoBehaviour
             }
         }
     } 
+
+    private void MoveLeft()
+    {
+        ToggleMovementFreeze(false);
+        rb.velocity = new Vector2(-movementSpeed, rb.velocity.y);
+    }
+
+    private void MoveRight()
+    {
+        ToggleMovementFreeze(false);
+        rb.velocity = new Vector2(movementSpeed, rb.velocity.y);
+    }
+
+    private void StopMovement()
+    {
+        ToggleMovementFreeze(true);
+    }
 
     private void Die()
     {

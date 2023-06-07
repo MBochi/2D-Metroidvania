@@ -53,6 +53,7 @@ public class CoinBag : MonoBehaviour
                 collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(damage);
             }
         }
+        
     }
 
     public void setDamage(int newDamage)
