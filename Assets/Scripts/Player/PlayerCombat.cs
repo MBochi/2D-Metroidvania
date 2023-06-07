@@ -49,7 +49,14 @@ public class PlayerCombat : MonoBehaviour
         // Damage the enemies
         foreach (Collider2D enemy in hitEnemies)
         {
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            if(enemy.gameObject.tag == "Enemy")
+            {
+                enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            }
+            else if(enemy.gameObject.tag == "GoblinKing")
+            {
+                enemy.GetComponent<GoblinKingController>().TakeDamage(attackDamage);
+            }
         }
     }
 
