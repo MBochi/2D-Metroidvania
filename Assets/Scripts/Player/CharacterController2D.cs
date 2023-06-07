@@ -32,6 +32,8 @@ public class CharacterController2D : MonoBehaviour
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
 
+	private float _fallSpeedYDampingChangeThreshold;
+
 	private void Awake()
 	{
 		m_Rigidbody2D = GetComponent<Rigidbody2D>();
@@ -41,6 +43,25 @@ public class CharacterController2D : MonoBehaviour
 
 		if (OnCrouchEvent == null)
 			OnCrouchEvent = new BoolEvent();
+	}
+
+	private void Start() 
+	{
+		_fallSpeedYDampingChangeThreshold = CameraManager.instance._fallSpeedYDampingChangeThreshold;
+	}
+
+	private void Update() 
+	{
+		if (m_Rigidbody2D.velocity.y < _fallSpeedYDampingChangeThreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromPlayerFalling)
+		{
+			CameraManager.instance.LerpYDamping(true);
+		}
+
+		if (m_Rigidbody2D.velocity.y >= 0f && !CameraManager.instance.IsLerpingYDamping && CameraManager.instance.LerpedFromPlayerFalling)
+		{
+			CameraManager.instance.LerpedFromPlayerFalling = false;
+			CameraManager.instance.LerpYDamping(false);
+		}
 	}
 
 	private void FixedUpdate()
