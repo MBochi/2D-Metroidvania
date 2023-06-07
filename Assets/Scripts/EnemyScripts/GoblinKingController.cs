@@ -32,6 +32,9 @@ public class GoblinKingController : MonoBehaviour
     private bool canCommand = true;
     private float commandCooldownTime = 2f;
 
+    private bool canPanic = true;
+    private float panicCooldownTime = 2f;
+
 
     private float m_JumpForce = 300f;
 
@@ -90,6 +93,10 @@ public class GoblinKingController : MonoBehaviour
         {
             Die();
             currentHealth = 0;
+        }
+        if (Input.GetKeyDown("h"))
+        {
+            Panic();
         }
 
 
@@ -158,6 +165,16 @@ public class GoblinKingController : MonoBehaviour
         animator.SetTrigger("Death");
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         boxCollider.enabled = false;
+    }
+
+    private void Panic()
+    {
+        if(canPanic)
+        {
+            canPanic = false;
+            animator.SetTrigger("Panic");
+            StartCoroutine(PanicCooldown());
+        }
     }
 
     private void Command()
@@ -267,6 +284,11 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator EatCooldown(){
         yield return new WaitForSeconds(eatCooldownTime);
         canEat = true;
+    }
+
+    private IEnumerator PanicCooldown(){
+        yield return new WaitForSeconds(panicCooldownTime);
+        canPanic = true;
     }
 
     private IEnumerator FlashRed()
