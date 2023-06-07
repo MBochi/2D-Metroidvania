@@ -9,6 +9,9 @@ public class CoinBag : MonoBehaviour
 
     private Animator animator;
     private Rigidbody2D rb;
+
+    private int damage = 25;
+
     void Start()
     {
         Init();
@@ -44,7 +47,17 @@ public class CoinBag : MonoBehaviour
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             animator.SetTrigger("Hit");
             StartCoroutine(RemoveDelay());
+
+            if(collision.gameObject.tag == "Player")
+            {
+                collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(damage);
+            }
         }
+    }
+
+    public void setDamage(int newDamage)
+    {
+        damage = newDamage;
     }
 
     private void Flip()

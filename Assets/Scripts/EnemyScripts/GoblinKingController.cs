@@ -37,11 +37,12 @@ public class GoblinKingController : MonoBehaviour
 
     private int maxHealth = 500;
     private int currentHealth;
+    private int attackDamage = 25;
     // Start is called before the first frame update
     void Start()
     {
         Init();
-        //Time.timeScale = 0.15f;
+        //Time.timeScale = 0.15f; // make unity run in slowmo
     }
 
     private void Init()
@@ -237,6 +238,7 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator ThrowDelay(){
         yield return new WaitForSeconds(1.25f);
         GameObject coinBag = Instantiate(coinBagPrefab, coinBagThrowPoint.transform.position, Quaternion.identity);
+        coinBag.GetComponent<CoinBag>().setDamage(attackDamage);
         if(m_FacingRight)
         {
             coinBag.GetComponent<Rigidbody2D>().AddForce(new Vector2(400f,300f));
