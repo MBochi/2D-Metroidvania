@@ -16,14 +16,10 @@ public class CameraControlTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collison)
     {
-        Debug.Log("CameraControl Enter2D");
-        Debug.Log(coll.gameObject.tag);
         if (collison.CompareTag("Player"))
         {
-            Debug.Log("CameraControl Enter2D - first if");
             if (customInspectorObjects.panCameraOnContact)
             {
-                Debug.Log("CameraControl Enter2D - second if");
                 CameraManager.instance.panCameraOnContact(customInspectorObjects.panDistance, customInspectorObjects.panTime, customInspectorObjects.panDirection, false);
             }
         }
@@ -31,9 +27,15 @@ public class CameraControlTrigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collison) 
     {
-        Debug.Log("CameraControl Exit2D");
         if (collison.CompareTag("Player"))
         {
+            Vector2 exitDirection = (collison.transform.position - coll.bounds.center).normalized;
+
+            if (customInspectorObjects.swapCameras && customInspectorObjects.cameraOnLeft != null && customInspectorObjects.cameraOnRight != null)
+            {
+                CameraManager.instance.SwapCamera(customInspectorObjects.cameraOnLeft, customInspectorObjects.cameraOnRight, exitDirection);
+            }
+
             if (customInspectorObjects.panCameraOnContact)
             {
                 CameraManager.instance.panCameraOnContact(customInspectorObjects.panDistance, customInspectorObjects.panTime, customInspectorObjects.panDirection, true);
