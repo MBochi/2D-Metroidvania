@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     public Animator animator;
+    public HealthBar healthBar;
 
     public LayerMask enemyLayers;
     public Transform attackPoint;
@@ -22,6 +23,7 @@ public class PlayerCombat : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     // Update is called once per frame
@@ -65,6 +67,7 @@ public class PlayerCombat : MonoBehaviour
         if(currentHealth < 0) return; // temporary edit to disable player inputs
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
+        healthBar.SetHealth(currentHealth);
         Debug.Log("Player took Damage: " + damage);
         if(currentHealth <= 0){
             Die();
