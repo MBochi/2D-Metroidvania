@@ -14,7 +14,7 @@ public class PlayerCombat : MonoBehaviour
     public float attackRange = 1.1f;
 
     private int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
 
     public float attackRate = 2f;
     private float nextAttackTime = 0f;

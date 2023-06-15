@@ -25,12 +25,16 @@ public class CharacterController2D : MonoBehaviour
 	[Space]
 
 	public UnityEvent OnLandEvent;
-
 	[System.Serializable]
 	public class BoolEvent : UnityEvent<bool> { }
-
 	public BoolEvent OnCrouchEvent;
 	private bool m_wasCrouching = false;
+	
+	[Header("Fall Damage Properties")]
+	[Space]
+	[SerializeField] private float PlayerYVelocity = 10f;
+	// [SerializeField] private int fallDamage = 10;
+	[SerializeField] private float fallDamageThreshold = -30f;
 
 	private float _fallSpeedYDampingChangeThreshold;
 
@@ -81,8 +85,20 @@ public class CharacterController2D : MonoBehaviour
 				animator.SetBool("Grounded", true);
 				if (!wasGrounded)
 					OnLandEvent.Invoke();
+
 			}
 		}
+
+		if (m_Grounded && (PlayerYVelocity <= fallDamageThreshold))
+		{
+			// TakeFallDamage(fallDamage);
+			TakeFallDamage((int) Mathf.Round(PlayerYVelocity));
+		}
+		else
+		{
+			PlayerYVelocity = m_Rigidbody2D.velocity.y;
+		}
+
 	}
 
     public void Move(float move, bool crouch, bool jump)
@@ -179,5 +195,12 @@ public class CharacterController2D : MonoBehaviour
 			// Switch the way the player is labelled as facing.
 			m_FacingRight = !m_FacingRight;
 		}
+	}
+
+	public void TakeFallDamage(int fallDamage)
+	{
+		fallDamage *= -1;
+		PlayerYVelocity = 0f;
+		GetComponent<PlayerCombat>().TakeDamage(fallDamage);
 	}
 }
