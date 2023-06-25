@@ -14,6 +14,7 @@ public class GoblinKingController : MonoBehaviour
 
     [SerializeField] private GameObject coinBagPrefab;
     [SerializeField] private GameObject coinBagThrowPoint;
+    [SerializeField] private GameObject shockWavePrefab;
 
     private SpriteRenderer sprite;
 
@@ -237,6 +238,8 @@ public class GoblinKingController : MonoBehaviour
             canCommand = false;
             animator.SetTrigger("Command");
             StartCoroutine(CommandCooldown());
+
+            GameObject shockWave = Instantiate(shockWavePrefab, this.transform.position, Quaternion.identity);
         }
 
     }
