@@ -17,7 +17,7 @@ TagManager:
   - TriggerLayer
   - Collectables
   - Traps
-  - 
+  - FX
   - 
   - 
   - 
@@ -48,4 +48,7 @@ TagManager:
     locked: 0
   - name: Collectables
     uniqueID: 4042993197
+    locked: 0
+  - name: FX
+    uniqueID: 4134816651
     locked: 0

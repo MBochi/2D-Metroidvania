@@ -715,7 +715,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20.55022, y: 14.914758, z: -11.521589}
+  m_LocalPosition: {x: 121.446045, y: -19.592081, z: -11.521589}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -820,7 +820,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 637513563}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -22.972965, y: 14.91476, z: -11.521589}
+  m_LocalPosition: {x: 122.02704, y: -20.88524, z: -11.521589}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1607,6 +1607,7 @@ MonoBehaviour:
   m_GroundCheck: {fileID: 2066759554}
   coinBagPrefab: {fileID: 4118242760989104140, guid: 7bbeb33b6e7729e4eace4aab190ed17b, type: 3}
   coinBagThrowPoint: {fileID: 1075080163}
+  shockWavePrefab: {fileID: 2387014328886651503, guid: a1db3151048142241a546e6c42fd8ccc, type: 3}
 --- !u!1001 &891822320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1698,7 +1699,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3336595176824252183, guid: 69de743c7430f0543bbbfb3395e66c2e, type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 3336595176824252183, guid: 69de743c7430f0543bbbfb3395e66c2e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -22262,7 +22263,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020499586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -18.7, y: 28.1, z: 0}
+  m_LocalPosition: {x: 126.3, y: -7.7, z: 0}
   m_LocalScale: {x: 1.7831, y: 2.0558, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -22270,7 +22271,7 @@ Transform:
   - {fileID: 342251684}
   - {fileID: 1172033212}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2020499593
 MonoBehaviour:
