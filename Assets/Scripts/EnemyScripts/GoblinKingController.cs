@@ -243,7 +243,11 @@ public class GoblinKingController : MonoBehaviour
 
     private void Hurt()
     {
-        animator.SetTrigger("Hurt");
+        string animation_name = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        if (animation_name == "Goblin King Idle Animation" || animation_name == "Goblin King Run Animation")
+        {
+            animator.SetTrigger("Hurt");
+        }
         StartCoroutine(FlashRed());
     }
 
