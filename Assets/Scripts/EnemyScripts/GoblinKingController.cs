@@ -36,7 +36,7 @@ public class GoblinKingController : MonoBehaviour
     private bool canPanic = true;
     private float panicCooldownTime = 2f;
 
-    private float m_JumpForce = 300f;
+    private float m_JumpForce = 500f;
 
     private int maxHealth = 500;
     private int currentHealth;
