@@ -78,11 +78,8 @@ public class PlayerCombat : MonoBehaviour
     public void Heal(int amount)
     {
         currentHealth += amount;
+        healthBar.SetHealth(currentHealth);
         Debug.Log("Player healed:" + amount);
-        if(currentHealth <= maxHealth)
-        {
-            currentHealth = maxHealth;
-        }
     }
 
     protected void Die()
