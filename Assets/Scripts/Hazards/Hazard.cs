@@ -6,11 +6,13 @@ using UnityEngine;
 public class Hazard : MonoBehaviour
 {
     [SerializeField] protected int damage = 1;
-    private WarpToSafeGround warpToSafeGround;
+    private SafeGroundSaver safeGroundSaver;
+    private SafeGroundCheckpointSaver safeGroundCheckpointSaver;
 
     public void Start()
     {
-        warpToSafeGround = GameObject.FindGameObjectWithTag("Player").GetComponent<WarpToSafeGround>();
+        safeGroundSaver = GameObject.FindGameObjectWithTag("Player").GetComponent<SafeGroundSaver>();
+        safeGroundCheckpointSaver = GameObject.FindGameObjectWithTag("Player").GetComponent<SafeGroundCheckpointSaver>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision) {
@@ -20,7 +22,9 @@ public class Hazard : MonoBehaviour
         {
             PlayerCombat player = collision.GetComponent<PlayerCombat>();
             player.TakeDamage(damage);
-            warpToSafeGround.WarpPlayerToSafeGround();
+
+            safeGroundSaver.WarpPlayerToSafeGround();
+            safeGroundCheckpointSaver.WarpPlayerToSafeGround();
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
