@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WarpToSafeGround : MonoBehaviour
+public class SafeGroundSaver : MonoBehaviour
 {
     [SerializeField] private float saveFrequency = 3f;
 
