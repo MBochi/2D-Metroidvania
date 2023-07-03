@@ -18,6 +18,9 @@ public class GoblinKingController : MonoBehaviour
     [SerializeField] private GameObject coinBagPrefab;
     [SerializeField] private GameObject coinBagThrowPoint;
     [SerializeField] private GameObject shockWavePrefab;
+    [SerializeField] private GameObject PlatformLeft;
+    [SerializeField] private GameObject PlatformRight;
+
 
     private SpriteRenderer sprite;
 
@@ -123,6 +126,10 @@ public class GoblinKingController : MonoBehaviour
             if (Input.GetKeyDown("z"))
             {
                 MoveLeft();
+            }
+            if (Input.GetKeyDown("t"))
+            {
+                JumpToPlatform();
             }
             if (Input.GetKeyDown("u"))
             {
@@ -232,6 +239,24 @@ public class GoblinKingController : MonoBehaviour
         ToggleMovementFreeze(true);
     }
 
+    private void JumpToPlatform()
+    {
+        int platformChoice = Random.Range(0,2);
+
+        if(platformChoice == 1) // left
+        {
+            transform.position = PlatformLeft.transform.position;
+            if(!m_FacingRight) Flip();
+        }
+        else if(platformChoice == 0) // right
+        {
+            transform.position = PlatformRight.transform.position;
+            if(m_FacingRight) Flip();
+        }
+        StartCoroutine(JumpToPlatformCooldown());
+        
+    }
+
     private void Die()
     {
         currentHealth = -1;
@@ -301,6 +326,17 @@ public class GoblinKingController : MonoBehaviour
         }
     }
 
+    private void ThrowMultipleCoinBags()
+    {
+        if(canThrow)
+        {
+            canThrow = false;
+            animator.SetTrigger("Throw");
+            StartCoroutine(ThrowDelayMultiple());
+            StartCoroutine(ThrowCooldown());
+        }
+    }
+
     private void Slam()
     {
          rb.AddForce(new Vector2(0f, -(m_JumpForce)/64));
@@ -347,9 +383,33 @@ public class GoblinKingController : MonoBehaviour
         }
     }
 
+    private IEnumerator ThrowDelayMultiple(){
+        yield return new WaitForSeconds(1.25f);
+
+        for(int i = 1; i < 5; i++)
+        {
+            GameObject coinBag = Instantiate(coinBagPrefab, coinBagThrowPoint.transform.position, Quaternion.identity);
+            coinBag.GetComponent<CoinBag>().setDamage(attackDamage);
+            if(m_FacingRight)
+            {
+                coinBag.GetComponent<Rigidbody2D>().AddForce(new Vector2(100f * i,300f));
+            }
+            else
+            {
+                coinBag.GetComponent<Rigidbody2D>().AddForce(new Vector2(-100f * i,300f));
+            }
+        }
+    }
+
     private IEnumerator JumpCooldown(){
         yield return new WaitForSeconds(jumpCooldownTime);
         canJump = true;
+    }
+
+    private IEnumerator JumpToPlatformCooldown()
+    {
+        yield return new WaitForSeconds(1f);
+        ThrowMultipleCoinBags();
     }
 
     private IEnumerator CommandCooldown(){
