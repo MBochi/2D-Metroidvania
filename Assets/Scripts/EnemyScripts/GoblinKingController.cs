@@ -410,6 +410,13 @@ public class GoblinKingController : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         ThrowMultipleCoinBags();
+        StartCoroutine(JumpFromPlatform());
+    }
+
+    private IEnumerator JumpFromPlatform()
+    {
+        yield return new WaitForSeconds(5f);
+        Jump();
     }
 
     private IEnumerator CommandCooldown(){
