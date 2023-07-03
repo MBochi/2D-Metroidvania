@@ -12,6 +12,9 @@ public class GoblinKingController : MonoBehaviour
 	[SerializeField] private Transform m_GroundCheck;
     const float k_GroundedRadius = .5f;
 
+    private GameObject playerObj;
+    private float x_direction_to_player;
+
     [SerializeField] private GameObject coinBagPrefab;
     [SerializeField] private GameObject coinBagThrowPoint;
     [SerializeField] private GameObject shockWavePrefab;
@@ -20,6 +23,8 @@ public class GoblinKingController : MonoBehaviour
 
     private BoxCollider2D boxCollider;
     private Material mat;
+
+    private bool bossFightStarted = false;
 
     private bool canJump = true;
     private float jumpCooldownTime = 2f;
@@ -57,7 +62,11 @@ public class GoblinKingController : MonoBehaviour
         sprite = GetComponent<SpriteRenderer>();
         ToggleMovementFreeze(true);
 
+        playerObj = GameObject.FindWithTag("Player");
+
         currentHealth = maxHealth;
+
+        StartBossFight();
     }
 
     private void FixedUpdate()
@@ -82,49 +91,53 @@ public class GoblinKingController : MonoBehaviour
             return;
         }
 
-
-        if (Input.GetKeyDown("j"))
+        if(bossFightStarted)
         {
-            Jump();
-        }
-        if (Input.GetKeyDown("k"))
-        {
-            Throw();
-        }
-        if (Input.GetKeyDown("l"))
-        {
-            Eat(5);
-        }
-        if (Input.GetKeyDown("p"))
-        {
-            Command();
-        }
-        if (Input.GetKeyDown("o"))
-        {
-            Die();
-            currentHealth = 0;
-        }
-        if (Input.GetKeyDown("h"))
-        {
-            Panic();
-        }
-        if (Input.GetKeyDown("z"))
-        {
-            MoveLeft();
-        }
-        if (Input.GetKeyDown("u"))
-        {
-            MoveRight();
-        }
-        if (Input.GetKeyUp("z") || Input.GetKeyUp("u"))
-        {
-            StopMovement();
+            x_direction_to_player = playerObj.transform.position.x - transform.position.x;
+            
+            if (Input.GetKeyDown("j"))
+            {
+                Jump();
+            }
+            if (Input.GetKeyDown("k"))
+            {
+                Throw();
+            }
+            if (Input.GetKeyDown("l"))
+            {
+                Eat(5);
+            }
+            if (Input.GetKeyDown("p"))
+            {
+                Command();
+            }
+            if (Input.GetKeyDown("o"))
+            {
+                Die();
+                currentHealth = 0;
+            }
+            if (Input.GetKeyDown("h"))
+            {
+                Panic();
+            }
+            if (Input.GetKeyDown("z"))
+            {
+                MoveLeft();
+            }
+            if (Input.GetKeyDown("u"))
+            {
+                MoveRight();
+            }
+            if (Input.GetKeyUp("z") || Input.GetKeyUp("u"))
+            {
+                StopMovement();
+            }
         }
         
 
 
         
-
+        // LR Movement + Fall animations
         
         if(rb.velocity.y < 0)
         {
@@ -155,6 +168,11 @@ public class GoblinKingController : MonoBehaviour
         }
     }
 
+    public void StartBossFight()
+    {
+        bossFightStarted = true;
+    }
+
 
     private void GroundCheck()
     {
@@ -165,6 +183,7 @@ public class GoblinKingController : MonoBehaviour
 			if (colliders[i].gameObject != gameObject)
 			{
 				animator.SetBool("Grounded", true);
+                ToggleMovementFreeze(true);
 			}
 		}
     }
@@ -308,7 +327,9 @@ public class GoblinKingController : MonoBehaviour
 
     private IEnumerator JumpDelay(){
         yield return new WaitForSeconds(.2f);
-        rb.AddForce(new Vector2(0f, m_JumpForce));
+        float xJumpDirection = x_direction_to_player * 40f;
+        ToggleMovementFreeze(false);
+        rb.AddForce(new Vector2(xJumpDirection, m_JumpForce));
         //boxCollider.isTrigger = true;
     }
 
