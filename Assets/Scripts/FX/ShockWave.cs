@@ -44,7 +44,7 @@ public class ShockWave : MonoBehaviour
                 continue;
             Vector2 direction = (hittingObjects[i].transform.position - transform.position).normalized;
 
-            rb.AddForce(direction * force, ForceMode2D.Impulse);
+            hittingObjects[i].GetComponent<CharacterController2D>().TakeKnockback(direction, force);
         }
     }
 

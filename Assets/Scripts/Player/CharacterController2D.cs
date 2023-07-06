@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,6 +22,8 @@ public class CharacterController2D : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	public bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+
+	private bool canTakeFallDamage = true;
 	
 	[Header("Events")]
 	[Space]
@@ -177,6 +181,18 @@ public class CharacterController2D : MonoBehaviour
 			}
     }
 
+	public void TakeKnockback(Vector2 direction, float force)
+	{
+		canTakeFallDamage = false;
+		StartCoroutine(TakeFallDamageCooldown());
+		m_Rigidbody2D.AddForce(direction * force, ForceMode2D.Impulse);
+	}
+
+	private IEnumerator TakeFallDamageCooldown(){
+        yield return new WaitForSeconds(1f);
+        canTakeFallDamage = true;
+    }
+
 	private void Flip()
 	{
 		if(m_FacingRight)
@@ -198,8 +214,11 @@ public class CharacterController2D : MonoBehaviour
 
 	public void TakeFallDamage(int fallDamage)
 	{
-		fallDamage *= -1;
-		PlayerYVelocity = 0f;
-		GetComponent<PlayerCombat>().TakeDamage(fallDamage);
+		if(canTakeFallDamage)
+		{
+			fallDamage *= -1;
+			PlayerYVelocity = 0f;
+			GetComponent<PlayerCombat>().TakeDamage(fallDamage);
+		}
 	}
 }

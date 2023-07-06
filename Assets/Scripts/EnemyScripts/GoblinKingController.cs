@@ -30,6 +30,7 @@ public class GoblinKingController : MonoBehaviour
 
     private bool bossFightStarted = false;
     private bool canDoMove = true;
+    private bool canTakeDamage = false;
 
     private bool canJump = true;
     private float jumpCooldownTime = 2f;
@@ -42,10 +43,10 @@ public class GoblinKingController : MonoBehaviour
     private bool hasHealed = false;
 
     private bool canCommand = true;
-    private float commandCooldownTime = 2f;
+    private float commandCooldownTime = .5f;
 
     private bool canPanic = true;
-    private float panicCooldownTime = 2f;
+    private float panicCooldownTime = 1.5f;
 
     private float m_JumpForce = 500f;
 
@@ -105,14 +106,14 @@ public class GoblinKingController : MonoBehaviour
         {
             x_direction_to_player = playerObj.transform.position.x - transform.position.x;
 
-            if(canDoMove)
+            if(canDoMove && canPanic)
             {
                 canDoMove = false;
-                int randomMove = Random.Range(1,4); // random move between 1 and 3
+                int randomMove = Random.Range(1,6); // random move between 1 and 5
                 
                 if (currentHealth <= maxHealth/3 && !hasHealed) // single time heal when low HP
                 {
-                    randomMove = 4;
+                    randomMove = 6;
                     hasHealed = true;
                 }
 
@@ -121,30 +122,32 @@ public class GoblinKingController : MonoBehaviour
                     int randomHealChance = Random.Range(0,20);
                     if(randomHealChance == 5)
                     {
-                        randomMove = 4;
+                        randomMove = 6;
                     }
                 }
 
                 switch (randomMove)
                 {
-                    case 1:
+                    case 1: // 40% chance for normal Jump
+                    case 2:
                         Jump();
                         StartCoroutine(CanDoMoveCooldown(2.5f));
                         break;
 
-                    case 2:
-                        JumpToPlatform();
-                        StartCoroutine(CanDoMoveCooldown(6f));
-                        break;
-
-                    case 3:
+                    case 3: // 40% chance for normal Throw
+                    case 4:
                         Throw();
                         StartCoroutine(CanDoMoveCooldown(1.5f));
                         break;
 
-                    case 4:
+                    case 5: // 20% chance to jump to a platform
+                        JumpToPlatform();
+                        StartCoroutine(CanDoMoveCooldown(6f));
+                        break;
+
+                    case 6:
                         Command();
-                        StartCoroutine(CanDoMoveCooldown(4f));
+                        StartCoroutine(CanDoMoveCooldown(3f));
                         break;
                     
                 }
@@ -233,6 +236,8 @@ public class GoblinKingController : MonoBehaviour
     public void StartBossFight()
     {
         bossFightStarted = true;
+        Panic();
+        canTakeDamage = true;
     }
 
 
@@ -266,7 +271,7 @@ public class GoblinKingController : MonoBehaviour
 
     public void TakeDamage(int damageAmount)
     {  
-        if(currentHealth > 0)
+        if(currentHealth > 0 && canTakeDamage)
         {
             Hurt(); // hurt animation
             currentHealth -= damageAmount;
@@ -339,6 +344,8 @@ public class GoblinKingController : MonoBehaviour
     {
         if(canCommand)
         {
+            canTakeDamage = false;
+            StartCoroutine(CanTakeDamageCooldown(3f));
             canCommand = false;
             animator.SetTrigger("Command");
             StartCoroutine(CommandCooldown());
@@ -499,7 +506,6 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator CanDoMoveCooldown(float time){
         yield return new WaitForSeconds(time);
         canDoMove = true;
-        Debug.Log("reset boss move");
     }
 
     private IEnumerator ThrowCooldown(){
@@ -515,6 +521,11 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator PanicCooldown(){
         yield return new WaitForSeconds(panicCooldownTime);
         canPanic = true;
+    }
+
+    private IEnumerator CanTakeDamageCooldown(float time){
+        yield return new WaitForSeconds(time);
+        canTakeDamage = true;
     }
 
     private IEnumerator FlashRed()

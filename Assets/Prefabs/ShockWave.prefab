@@ -148,7 +148,7 @@ MonoBehaviour:
   maxRadius: 25
   speed: 100
   startWidth: 5
-  force: 5
+  force: 2
   m_WhatIsPlayer:
     serializedVersion: 2
     m_Bits: 8
