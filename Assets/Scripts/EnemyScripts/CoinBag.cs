@@ -42,7 +42,7 @@ public class CoinBag : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag != "Enemy" && collision.gameObject.tag != "Projectile")
+        if (collision.gameObject.tag != "Enemy" && collision.gameObject.tag != "Projectile" && collision.gameObject.tag != "GoblinKing")
         {
             rb.constraints = RigidbodyConstraints2D.FreezeAll;
             animator.SetTrigger("Hit");

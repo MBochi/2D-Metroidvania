@@ -20,6 +20,7 @@ public class GoblinKingController : MonoBehaviour
     [SerializeField] private GameObject shockWavePrefab;
     [SerializeField] private GameObject PlatformLeft;
     [SerializeField] private GameObject PlatformRight;
+     private int lastPlatformChoice = -1;
 
 
     private SpriteRenderer sprite;
@@ -28,6 +29,7 @@ public class GoblinKingController : MonoBehaviour
     private Material mat;
 
     private bool bossFightStarted = false;
+    private bool canDoMove = true;
 
     private bool canJump = true;
     private float jumpCooldownTime = 2f;
@@ -37,6 +39,7 @@ public class GoblinKingController : MonoBehaviour
 
     private bool canEat = true;
     private float eatCooldownTime = 2f;
+    private bool hasHealed = false;
 
     private bool canCommand = true;
     private float commandCooldownTime = 2f;
@@ -68,8 +71,6 @@ public class GoblinKingController : MonoBehaviour
         playerObj = GameObject.FindWithTag("Player");
 
         currentHealth = maxHealth;
-
-        StartBossFight();
     }
 
     private void FixedUpdate()
@@ -94,10 +95,61 @@ public class GoblinKingController : MonoBehaviour
             return;
         }
 
+        if (Input.GetKeyDown("k"))
+        {
+            StartBossFight();
+        }
+
         if(bossFightStarted)
         {
             x_direction_to_player = playerObj.transform.position.x - transform.position.x;
+
+            if(canDoMove)
+            {
+                canDoMove = false;
+                int randomMove = Random.Range(1,4); // random move between 1 and 3
+                
+                if (currentHealth <= maxHealth/3 && !hasHealed) // single time heal when low HP
+                {
+                    randomMove = 4;
+                    hasHealed = true;
+                }
+
+                if(hasHealed) // small chance to heal again
+                {
+                    int randomHealChance = Random.Range(0,20);
+                    if(randomHealChance == 5)
+                    {
+                        randomMove = 4;
+                    }
+                }
+
+                switch (randomMove)
+                {
+                    case 1:
+                        Jump();
+                        StartCoroutine(CanDoMoveCooldown(2.5f));
+                        break;
+
+                    case 2:
+                        JumpToPlatform();
+                        StartCoroutine(CanDoMoveCooldown(6f));
+                        break;
+
+                    case 3:
+                        Throw();
+                        StartCoroutine(CanDoMoveCooldown(1.5f));
+                        break;
+
+                    case 4:
+                        Command();
+                        StartCoroutine(CanDoMoveCooldown(4f));
+                        break;
+                    
+                }
+            }
             
+            /*  MANUAL CONTROLLS
             if (Input.GetKeyDown("j"))
             {
                 Jump();
@@ -139,6 +191,8 @@ public class GoblinKingController : MonoBehaviour
             {
                 StopMovement();
             }
+
+            */
         }
         
 
@@ -242,6 +296,11 @@ public class GoblinKingController : MonoBehaviour
     private void JumpToPlatform()
     {
         int platformChoice = Random.Range(0,2);
+        if (platformChoice == lastPlatformChoice)
+        {
+            if (platformChoice == 0) platformChoice = 1;
+            if (platformChoice == 1) platformChoice = 0;
+        }
 
         if(platformChoice == 1) // left
         {
@@ -254,7 +313,7 @@ public class GoblinKingController : MonoBehaviour
             if(m_FacingRight) Flip();
         }
         StartCoroutine(JumpToPlatformCooldown());
-        
+        lastPlatformChoice = platformChoice;
     }
 
     private void Die()
@@ -320,6 +379,8 @@ public class GoblinKingController : MonoBehaviour
         if(canThrow)
         {
             canThrow = false;
+            if(x_direction_to_player > 0 && !m_FacingRight) Flip();
+            else if(x_direction_to_player < 0 && m_FacingRight) Flip();
             animator.SetTrigger("Throw");
             StartCoroutine(ThrowDelay());
             StartCoroutine(ThrowCooldown());
@@ -415,13 +476,20 @@ public class GoblinKingController : MonoBehaviour
 
     private IEnumerator JumpFromPlatform()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         Jump();
     }
 
     private IEnumerator CommandCooldown(){
         yield return new WaitForSeconds(commandCooldownTime);
         canCommand = true;
+        Eat(maxHealth / 2);
+    }
+
+    private IEnumerator CanDoMoveCooldown(float time){
+        yield return new WaitForSeconds(time);
+        canDoMove = true;
+        Debug.Log("reset boss move");
     }
 
     private IEnumerator ThrowCooldown(){
