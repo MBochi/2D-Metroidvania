@@ -51,7 +51,8 @@ public class GoblinKingController : MonoBehaviour
 
     private int maxHealth = 500;
     private int currentHealth;
-    private int attackDamage = 25;
+    private int coinBagDamage = 25;
+    private int contactDamage = 50;
     private float movementSpeed = 5f;
     // Start is called before the first frame update
     void Start()
@@ -422,6 +423,15 @@ public class GoblinKingController : MonoBehaviour
         m_FacingRight = !m_FacingRight;
 	}
 
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(contactDamage);
+        }
+    }
+
     private IEnumerator JumpDelay(){
         yield return new WaitForSeconds(.2f);
         float xJumpDirection = x_direction_to_player * 40f;
@@ -433,7 +443,7 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator ThrowDelay(){
         yield return new WaitForSeconds(1.25f);
         GameObject coinBag = Instantiate(coinBagPrefab, coinBagThrowPoint.transform.position, Quaternion.identity);
-        coinBag.GetComponent<CoinBag>().setDamage(attackDamage);
+        coinBag.GetComponent<CoinBag>().setDamage(coinBagDamage);
         if(m_FacingRight)
         {
             coinBag.GetComponent<Rigidbody2D>().AddForce(new Vector2(400f,300f));
@@ -450,7 +460,7 @@ public class GoblinKingController : MonoBehaviour
         for(int i = 1; i < 5; i++)
         {
             GameObject coinBag = Instantiate(coinBagPrefab, coinBagThrowPoint.transform.position, Quaternion.identity);
-            coinBag.GetComponent<CoinBag>().setDamage(attackDamage);
+            coinBag.GetComponent<CoinBag>().setDamage(coinBagDamage);
             if(m_FacingRight)
             {
                 coinBag.GetComponent<Rigidbody2D>().AddForce(new Vector2(100f * i,300f));
