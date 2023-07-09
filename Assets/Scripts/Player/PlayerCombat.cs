@@ -15,15 +15,19 @@ public class PlayerCombat : MonoBehaviour
     public float attackRange = 1.1f;
 
     private int maxHealth = 100;
-    [SerializeField] private int currentHealth;
+    [SerializeField] public int currentHealth;
 
     public float attackRate = 2f;
     private float nextAttackTime = 0f;
+    
+    private BonfireCheckPointSaver bonfireCheckPointSaver;
+
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        bonfireCheckPointSaver = GameObject.FindGameObjectWithTag("Player").GetComponent<BonfireCheckPointSaver>();
     }
 
     // Update is called once per frame
@@ -88,16 +92,38 @@ public class PlayerCombat : MonoBehaviour
         
         healthBar.SetHealth(currentHealth);
     }
-
+    
     protected void Die()
     {
         animator.SetTrigger("Death");
-
         GetComponent<Collider2D>().enabled = false;
         GetComponent<CircleCollider2D>().enabled = false;
         this.enabled = false;
         gameObject.GetComponent<PlayerMovement>().enabled = false;
         gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeAll;
+        StartCoroutine(DeathScreen());
+    }
+
+    IEnumerator DeathScreen()
+    {
+        yield return new WaitForSeconds(5);
+        ResetPlayer();
+    }
+
+    private void ResetPlayer()
+    {
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+        bonfireCheckPointSaver.WarpPlayerToLastBonfire();
+
+        GetComponent<Collider2D>().enabled = true;
+        GetComponent<CircleCollider2D>().enabled = true;
+        this.enabled = true;
+        gameObject.GetComponent<PlayerMovement>().enabled = true;
+        gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+        gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        animator.SetTrigger("IdleActive");
     }
 
     private void OnDrawGizmosSelected() {
