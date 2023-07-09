@@ -1445,6 +1445,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 088911de45e912a4599276f871fa09de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorLeft: {fileID: 950149084}
+  goblinBoss: {fileID: 882074409}
 --- !u!1001 &847542340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1866,6 +1868,7 @@ GameObject:
   m_Component:
   - component: {fileID: 950149085}
   - component: {fileID: 950149086}
+  - component: {fileID: 950149087}
   m_Layer: 0
   m_Name: DoorLeft
   m_TagString: Untagged
@@ -1881,7 +1884,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950149084}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.66, y: -2.83, z: -0.18161695}
+  m_LocalPosition: {x: -19.46, y: -2.765, z: -0.18161695}
   m_LocalScale: {x: 1, y: 6.04478, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1940,6 +1943,32 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!61 &950149087
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950149084}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.3859787, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 5.012671}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.2280426, y: 1}
+  m_EdgeRadius: 0
 --- !u!1001 &958240889
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21140,11 +21169,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1301105509101167223, guid: a6091836d116c88408a2b4031c32948d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 136.42
+      value: 134.96
       objectReference: {fileID: 0}
     - target: {fileID: 1301105509101167223, guid: a6091836d116c88408a2b4031c32948d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -17.79
+      value: -17.82
       objectReference: {fileID: 0}
     - target: {fileID: 1301105509101167223, guid: a6091836d116c88408a2b4031c32948d, type: 3}
       propertyPath: m_LocalPosition.z
