@@ -20,8 +20,7 @@ public class GoblinKingController : MonoBehaviour
     [SerializeField] private GameObject shockWavePrefab;
     [SerializeField] private GameObject PlatformLeft;
     [SerializeField] private GameObject PlatformRight;
-     private int lastPlatformChoice = -1;
-
+    private int lastPlatformChoice = -1;
 
     private SpriteRenderer sprite;
 
@@ -95,11 +94,6 @@ public class GoblinKingController : MonoBehaviour
         if (currentHealth < 0)
         {
             return;
-        }
-
-        if (Input.GetKeyDown("k"))
-        {
-            StartBossFight();
         }
 
         if(bossFightStarted)
@@ -235,9 +229,12 @@ public class GoblinKingController : MonoBehaviour
 
     public void StartBossFight()
     {
-        bossFightStarted = true;
-        Panic();
-        canTakeDamage = true;
+        if(!bossFightStarted)
+        {
+            bossFightStarted = true;
+            Panic();
+            canTakeDamage = true;
+        }
     }
 
 
