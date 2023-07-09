@@ -42,6 +42,17 @@ public class CameraControlTrigger : MonoBehaviour
             }
         }
     }
+
+    public void SwapCameraOnDeath()
+    {
+            Debug.Log("Swap Cameras");
+            Vector2 exitDirection = new Vector2(-1,0);
+
+            if (customInspectorObjects.swapCameras && customInspectorObjects.cameraOnLeft != null && customInspectorObjects.cameraOnRight != null)
+            {
+                CameraManager.instance.SwapCamera(customInspectorObjects.cameraOnLeft, customInspectorObjects.cameraOnRight, exitDirection);
+            }
+    }
 }
 
 [System.Serializable]

@@ -21,6 +21,7 @@ public class PlayerCombat : MonoBehaviour
     private float nextAttackTime = 0f;
     
     private BonfireCheckPointSaver bonfireCheckPointSaver;
+    private CameraControlTrigger cameraControlTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,7 @@ public class PlayerCombat : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         bonfireCheckPointSaver = GameObject.FindGameObjectWithTag("Player").GetComponent<BonfireCheckPointSaver>();
+        cameraControlTrigger = GameObject.Find("BossDoorCAM").GetComponent<CameraControlTrigger>();
     }
 
     // Update is called once per frame
@@ -124,6 +126,7 @@ public class PlayerCombat : MonoBehaviour
         gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
         animator.SetTrigger("IdleActive");
+        cameraControlTrigger.SwapCameraOnDeath();
     }
 
     private void OnDrawGizmosSelected() {
