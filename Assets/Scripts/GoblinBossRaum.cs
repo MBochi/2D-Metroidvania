@@ -9,6 +9,7 @@ public class GoblinBossRaum : MonoBehaviour
     [SerializeField] private GoblinKingController goblinBoss;
     private float doorSpeed = 4f;
     private bool leftDoorIsClosing = false;
+    private bool bossFightStarted = false;
 
     // Start is called before the first frame update
     void Start()
@@ -19,21 +20,21 @@ public class GoblinBossRaum : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("k")) // replace with player entering room
-        {
-            StartBossFight();
-        }
-
         if(leftDoorIsClosing)
         {
             doorLeft.transform.position += Vector3.down * Time.deltaTime * doorSpeed;
         }
     }
 
-    private void StartBossFight()
+    public void StartBossFight()
     {
-        goblinBoss.StartBossFight();
-        CloseLeftDoor();
+        if(!bossFightStarted)
+        {
+            bossFightStarted = true;
+            CloseLeftDoor();
+            StartCoroutine(BossFightStartingCoolDown());
+        }
+        
     }
 
     private void CloseLeftDoor()
@@ -45,5 +46,10 @@ public class GoblinBossRaum : MonoBehaviour
     private IEnumerator LeftDoorMovingCoolDown(){
         yield return new WaitForSeconds(1f);
         leftDoorIsClosing = false;
+    }
+
+    private IEnumerator BossFightStartingCoolDown(){
+        yield return new WaitForSeconds(2.5f);
+        goblinBoss.StartBossFight();
     }
 }

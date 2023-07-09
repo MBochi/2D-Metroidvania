@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoblinKingController : MonoBehaviour
 {
 
-    private bool m_FacingRight = false;
+    private bool m_FacingRight = true;
     private Animator animator;
     private Rigidbody2D rb;
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
@@ -231,6 +231,7 @@ public class GoblinKingController : MonoBehaviour
     {
         if(!bossFightStarted)
         {
+            Flip();
             bossFightStarted = true;
             Panic();
             canTakeDamage = true;
