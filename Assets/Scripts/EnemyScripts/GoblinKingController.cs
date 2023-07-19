@@ -7,12 +7,14 @@ public class GoblinKingController : MonoBehaviour
 
     private bool m_FacingRight = true;
     private Animator animator;
+    public HealthBar healthBar;
     private Rigidbody2D rb;
     [SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character
 	[SerializeField] private Transform m_GroundCheck;
     const float k_GroundedRadius = .5f;
 
     private GameObject playerObj;
+    public GameObject bossHealthbarObj;
     private float x_direction_to_player;
 
     [SerializeField] private GameObject coinBagPrefab;
@@ -74,6 +76,7 @@ public class GoblinKingController : MonoBehaviour
         playerObj = GameObject.FindWithTag("Player");
 
         currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
         startingPos = transform.position;
     }
 
@@ -232,12 +235,12 @@ public class GoblinKingController : MonoBehaviour
 
     public void StartBossFight()
     {
-        Debug.Log(bossFightStarted);
         if(!bossFightStarted)
         {
+            Debug.Log("Start Bossfight");
+            bossHealthbarObj.SetActive(true);
             canDoMove = true;
             canPanic = true;
-            Debug.Log("Start Bossfight");
             Flip();
             bossFightStarted = true;
             Panic();
@@ -250,8 +253,10 @@ public class GoblinKingController : MonoBehaviour
         if (bossFightStarted)
         {
             Debug.Log("Stop Bossfight");
+            bossHealthbarObj.SetActive(false);
             bossFightStarted = !bossFightStarted;
             canTakeDamage = !canTakeDamage;
+            currentHealth = maxHealth;
         }
     }
 
@@ -297,8 +302,9 @@ public class GoblinKingController : MonoBehaviour
             currentHealth -= damageAmount;
             if(currentHealth < 0)
             {
-                currentHealth = 0;
+                currentHealth = 0;  
             }
+            healthBar.SetHealth(currentHealth);
         }
     } 
 
@@ -398,6 +404,7 @@ public class GoblinKingController : MonoBehaviour
             {
                 currentHealth = maxHealth;
             }
+            healthBar.SetHealth(currentHealth);
         }
         
     }
