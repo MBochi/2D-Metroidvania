@@ -354,6 +354,7 @@ public class GoblinKingController : MonoBehaviour
         animator.SetTrigger("Death");
         rb.constraints = RigidbodyConstraints2D.FreezeAll;
         boxCollider.enabled = false;
+        bossHealthbarObj.SetActive(false);
     }
 
     private void Panic()
@@ -371,7 +372,7 @@ public class GoblinKingController : MonoBehaviour
         if(canCommand)
         {
             canTakeDamage = false;
-            StartCoroutine(CanTakeDamageCooldown(3f));
+            StartCoroutine(CanTakeDamageCooldown(1f));
             canCommand = false;
             animator.SetTrigger("Command");
             StartCoroutine(CommandCooldown());
