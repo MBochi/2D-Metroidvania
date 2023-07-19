@@ -7,11 +7,13 @@ using UnityEditor;
 public class CameraControlTrigger : MonoBehaviour
 {
     public CustomInspectorObjects customInspectorObjects;
+    private GoblinKingController goblinKingController;
     private Collider2D coll;
 
     private void Start() 
     {
         coll = GetComponent<Collider2D>();
+        goblinKingController = GameObject.FindGameObjectWithTag("GoblinKing").GetComponent<GoblinKingController>();
     }
 
     private void OnTriggerEnter2D(Collider2D collison)
@@ -34,6 +36,7 @@ public class CameraControlTrigger : MonoBehaviour
             if (customInspectorObjects.swapCameras && customInspectorObjects.cameraOnLeft != null && customInspectorObjects.cameraOnRight != null)
             {
                 CameraManager.instance.SwapCamera(customInspectorObjects.cameraOnLeft, customInspectorObjects.cameraOnRight, exitDirection);
+                goblinKingController.ResetBossPosition();
             }
 
             if (customInspectorObjects.panCameraOnContact)

@@ -48,6 +48,7 @@ public class GoblinBossRaum : MonoBehaviour
     public void OpenLeftDoor()
     {
         leftDoorIsOpening = !leftDoorIsOpening;
+        bossFightStarted = false;
         StartCoroutine(LeftDoorOpeningCoolDown());
     }
 
@@ -70,7 +71,6 @@ public class GoblinBossRaum : MonoBehaviour
 
     private IEnumerator BossFightStartingCoolDown(){
         yield return new WaitForSeconds(2.5f);
-        bossFightStarted = false;
         goblinBoss.StartBossFight();
     }
 }
