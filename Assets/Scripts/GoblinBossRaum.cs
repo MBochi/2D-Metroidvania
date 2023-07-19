@@ -5,16 +5,19 @@ using UnityEngine;
 public class GoblinBossRaum : MonoBehaviour
 {
 
+    
     [SerializeField] private GameObject doorLeft;
     [SerializeField] private GoblinKingController goblinBoss;
+    private Vector3 startingPos;
     private float doorSpeed = 4f;
+    private bool leftDoorIsOpening = false;
     private bool leftDoorIsClosing = false;
     private bool bossFightStarted = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        startingPos = doorLeft.transform.position;
     }
 
     // Update is called once per frame
@@ -23,6 +26,11 @@ public class GoblinBossRaum : MonoBehaviour
         if(leftDoorIsClosing)
         {
             doorLeft.transform.position += Vector3.down * Time.deltaTime * doorSpeed;
+        }
+
+        if(leftDoorIsOpening)
+        {
+            doorLeft.transform.position = Vector3.MoveTowards(doorLeft.transform.position,startingPos,doorSpeed * Time.deltaTime);
         }
     }
 
@@ -37,19 +45,32 @@ public class GoblinBossRaum : MonoBehaviour
         
     }
 
-    private void CloseLeftDoor()
+    public void OpenLeftDoor()
     {
-        leftDoorIsClosing = true;
-        StartCoroutine(LeftDoorMovingCoolDown());
+        leftDoorIsOpening = !leftDoorIsOpening;
+        StartCoroutine(LeftDoorOpeningCoolDown());
     }
 
-    private IEnumerator LeftDoorMovingCoolDown(){
+    private IEnumerator LeftDoorOpeningCoolDown()
+    {
         yield return new WaitForSeconds(1f);
-        leftDoorIsClosing = false;
+        leftDoorIsOpening = !leftDoorIsOpening;
+    }
+
+    private void CloseLeftDoor()
+    {
+        leftDoorIsClosing = !leftDoorIsClosing;
+        StartCoroutine(LeftDoorClosingCoolDown());
+    }
+
+    private IEnumerator LeftDoorClosingCoolDown(){
+        yield return new WaitForSeconds(1f);
+        leftDoorIsClosing = !leftDoorIsClosing;
     }
 
     private IEnumerator BossFightStartingCoolDown(){
         yield return new WaitForSeconds(2.5f);
+        bossFightStarted = false;
         goblinBoss.StartBossFight();
     }
 }

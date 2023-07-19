@@ -22,6 +22,8 @@ public class PlayerCombat : MonoBehaviour
     
     private BonfireCheckPointSaver bonfireCheckPointSaver;
     private CameraControlTrigger cameraControlTrigger;
+    private GoblinBossRaum goblinBossRaum;
+    private GoblinKingController goblinKingController;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,8 @@ public class PlayerCombat : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
         bonfireCheckPointSaver = GameObject.FindGameObjectWithTag("Player").GetComponent<BonfireCheckPointSaver>();
         cameraControlTrigger = GameObject.Find("BossDoorCAM").GetComponent<CameraControlTrigger>();
+        goblinBossRaum = GameObject.Find("GoblinBossRaum").GetComponent<GoblinBossRaum>();
+        goblinKingController = GameObject.FindGameObjectWithTag("GoblinKing").GetComponent<GoblinKingController>();
     }
 
     // Update is called once per frame
@@ -109,6 +113,8 @@ public class PlayerCombat : MonoBehaviour
     IEnumerator DeathScreen()
     {
         yield return new WaitForSeconds(5);
+        goblinBossRaum.OpenLeftDoor();
+        goblinKingController.StopBossFight();
         ResetPlayer();
     }
 

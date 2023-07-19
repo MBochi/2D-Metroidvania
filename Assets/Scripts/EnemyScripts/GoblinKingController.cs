@@ -54,6 +54,8 @@ public class GoblinKingController : MonoBehaviour
     private int coinBagDamage = 25;
     private int contactDamage = 50;
     private float movementSpeed = 5f;
+
+    private Vector3 startingPos;
     // Start is called before the first frame update
     void Start()
     {
@@ -72,6 +74,7 @@ public class GoblinKingController : MonoBehaviour
         playerObj = GameObject.FindWithTag("Player");
 
         currentHealth = maxHealth;
+        startingPos = transform.position;
     }
 
     private void FixedUpdate()
@@ -229,13 +232,32 @@ public class GoblinKingController : MonoBehaviour
 
     public void StartBossFight()
     {
+        Debug.Log(bossFightStarted);
         if(!bossFightStarted)
         {
+            canDoMove = true;
+            canPanic = true;
+            Debug.Log("Start Bossfight");
             Flip();
             bossFightStarted = true;
             Panic();
             canTakeDamage = true;
         }
+    }
+
+    public void StopBossFight()
+    {
+        if (bossFightStarted)
+        {
+            Debug.Log("Stop Bossfight");
+            bossFightStarted = !bossFightStarted;
+            canTakeDamage = !canTakeDamage;
+        }
+    }
+
+    public void ResetBossPosition()
+    {
+        transform.position = startingPos;
     }
 
 

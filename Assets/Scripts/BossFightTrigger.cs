@@ -5,10 +5,11 @@ using UnityEngine;
 public class BossFightTrigger : MonoBehaviour
 {
     [SerializeField] GoblinBossRaum BossRoom;
+    private GoblinKingController goblinKingController;
     // Start is called before the first frame update
     void Start()
     {
-        
+        goblinKingController = GameObject.FindGameObjectWithTag("GoblinKing").GetComponent<GoblinKingController>();
     }
 
     // Update is called once per frame
@@ -21,6 +22,7 @@ public class BossFightTrigger : MonoBehaviour
     {
         if(col.gameObject.tag == "Player")
         {
+            goblinKingController.ResetBossPosition();
             BossRoom.StartBossFight();
         }
     }
