@@ -6,27 +6,26 @@
     - 
   Character:
 
-    - [ ] Character can block attacks
+    - Character can block attacks
     - Character can roll
   Enemies:
 
-    - Gegner die Schießen
-    - Respawn der Gegner wenn man stirbt oder einen neuen Raum betritt
+    - Shooting enemies
+    - Respawning enemies when dying or sitting on a Bonfire
   UI:
 
     - Notifications Pop-Up (Pickups, Damage(?), Checkpoints)
     - Start/Settings/Quit/EndScreen (Main Menu)
  
   Functionalites:
+  
     - Shop to buy upgrades in
     - Level Up at Bonfires
-    -
-    -
   Level:
 
-    - level design 1 Spawn 3 Gegnerräume 1 Shop 1 Bossraum
+    - Create on playable Level (e.g. 1 Spawn 3 Enemy-Rooms 1 Shop 1 Bossroom)
     
   SFX:
 
     - Fog
-    - (high-) lighting
+    - (High-) Lighting
