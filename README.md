@@ -23,7 +23,7 @@
     - Level Up at Bonfires
   Level:
 
-    - Create on playable Level (e.g. 1 Spawn 3 Enemy-Rooms 1 Shop 1 Bossroom)
+    - Create a playable level (e.g. 1 Spawn 3 Enemy-Rooms 1 Shop 1 Bossroom)
     
   SFX:
 
