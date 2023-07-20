@@ -3,7 +3,7 @@ TODO:
   Fixes:
     - 
   Character:
-    - Character can block attacks
+    - [ ] Character can block attacks
     - Character can roll
     - 
     -
