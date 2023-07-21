@@ -10,12 +10,13 @@ public class BonfireCheckPointSaver : MonoBehaviour
     public Vector2 NewBonfireLocation {get; private set; } = Vector2.zero;
     [SerializeField] private bool isPlayerInBonfireRange;
 
-    private PlayerCombat playerCombat;
+    private Notifications notification;
 
     private void Start() 
     {
         SavedBonfireLocation = transform.position;
         isPlayerInBonfireRange = false;
+        notification = GameObject.FindWithTag("Player").GetComponent<Notifications>();
     }
 
     private void Update() 
@@ -23,7 +24,7 @@ public class BonfireCheckPointSaver : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Return) && isPlayerInBonfireRange)
         {
             SavedBonfireLocation = NewBonfireLocation;
-            Debug.Log("BonfireCheckPoint set at " + SavedBonfireLocation);
+            notification.setText("BonfireCheckPoint set.");
         }
     }
 
