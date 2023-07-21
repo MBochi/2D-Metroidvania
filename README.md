@@ -14,7 +14,7 @@
     - Respawning enemies when dying or sitting on a Bonfire
   UI:
 
-    - Notifications Pop-Up (Pickups, Damage(?), Checkpoints)
+    - Notifications Pop-Up (Pickups, Damage(?))
     - Start/Settings/Quit/EndScreen (Main Menu)
  
   Functionalites:
