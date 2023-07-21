@@ -28,8 +28,6 @@ public class PlayerMovement : MonoBehaviour
             jump = true;
         }
 
-        MovementAnimation();
-
         if(Input.GetButtonDown("Crouch"))
         {
             crouch = true;
@@ -37,6 +35,8 @@ public class PlayerMovement : MonoBehaviour
         {
             crouch = false;
         }
+
+        MovementAnimation();
     }
 
     private void FixedUpdate() 
@@ -61,9 +61,19 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("AirSpeedY", 0);
         }
 
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButtonDown("Jump") && !crouch)
         {
             animator.SetBool("Jump", true);
+        }
+
+        if(crouch)
+        {
+            animator.SetBool("Crouch", true);
+        }
+
+        if(!crouch)
+        {
+            animator.SetBool("Crouch", false);
         }
     }
 }
