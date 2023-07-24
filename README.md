@@ -7,8 +7,7 @@
     - Doors as prefabs
     - Enemies can run and float above Player when hes close
   Character:
-
-    - Character can block attacks
+  
     - Character can roll
   Enemies:
 
