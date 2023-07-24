@@ -27,17 +27,21 @@ public abstract class Enemy : MonoBehaviour
 
     protected Animator animator;
     protected Rigidbody2D m_Rigidbody2D;
+    protected PlayerCombat playerCombat;
+
     [SerializeField] protected Transform cliffCheck;
     [SerializeField] protected Transform wallCheck;
     [SerializeField] protected Transform attackPoint;
     [SerializeField] protected Transform LootSpawnPoint;
-    protected GameObject playerObj;
+    
     [SerializeField] protected LayerMask playerLayer;
+    [SerializeField] protected LayerMask m_WhatIsGround;
 
     [SerializeField] protected GameObject coinPrefab;
     [SerializeField] protected GameObject heartPrefab;
+    [SerializeField] protected GameObject playerObj;
 
-    [SerializeField] protected LayerMask m_WhatIsGround;
+    
     const float k_CliffRadius = .2f;
     [SerializeField] protected bool m_FacingRight = false;
 
@@ -55,6 +59,7 @@ public abstract class Enemy : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         m_Rigidbody2D = GetComponent<Rigidbody2D>();
+        playerCombat = GameObject.FindWithTag("Player").GetComponent<PlayerCombat>();
         playerObj = GameObject.FindWithTag("Player");
         currentHealth = maxHealth;
     }
@@ -268,7 +273,11 @@ public abstract class Enemy : MonoBehaviour
             // Damage the player
             foreach (Collider2D player in hitPlayer)
             {
-                playerWasHit = true;
+                if (checkIfPlayerBlocksAttack(player))
+                {
+                    playerWasHit = true;
+                }
+                
             }
             if(playerWasHit)
             {
@@ -276,6 +285,28 @@ public abstract class Enemy : MonoBehaviour
             }
         }
         
+    }
+
+    private bool checkIfPlayerBlocksAttack(Collider2D collider)
+    {
+        // true if either the player blocks and the attack comes from the other side or player is not blocking
+        if (playerCombat.isBlocking && checkifEnemyBehindPlayer(collider) || !playerCombat.isBlocking)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool checkifEnemyBehindPlayer(Collider2D collider)
+    {
+        if (collider.transform.rotation.y < 0 && this.transform.localScale.x > 0 || 
+            collider.transform.rotation.y == 0 && this.transform.localScale.x < 0) return true;
+
+        else return false;     
     }
 
     private void OnDrawGizmosSelected() {

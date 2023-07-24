@@ -9,6 +9,7 @@ public class CoinBag : MonoBehaviour
 
     private Animator animator;
     private Rigidbody2D rb;
+    private PlayerCombat playerCombat;
 
     private int damage = 25;
 
@@ -21,6 +22,7 @@ public class CoinBag : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
+        playerCombat = GameObject.FindWithTag("Player").GetComponent<PlayerCombat>();
     }
 
     // Update is called once per frame
@@ -48,12 +50,34 @@ public class CoinBag : MonoBehaviour
             animator.SetTrigger("Hit");
             StartCoroutine(RemoveDelay());
 
-            if(collision.gameObject.tag == "Player")
+            if(collision.gameObject.tag == "Player" && checkIfPlayerBlocksAttack(collision))
             {
                 collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(damage);
             }
         }
         
+    }
+
+    private bool checkIfPlayerBlocksAttack(Collision2D collider)
+    {
+        // true if either the player blocks and the attack comes from the other side or player is not blocking
+        if (playerCombat.isBlocking && checkifEnemyBehindPlayer(collider) || !playerCombat.isBlocking)
+        {
+            return true;
+        }
+
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool checkifEnemyBehindPlayer(Collision2D collider)
+    {
+        if (collider.transform.rotation.y < 0 && this.transform.localScale.x > 0 || 
+            collider.transform.rotation.y == 0 && this.transform.localScale.x < 0) return true;
+
+        else return false;     
     }
 
     public void setDamage(int newDamage)

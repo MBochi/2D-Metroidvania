@@ -11,15 +11,15 @@ public class PlayerCombat : MonoBehaviour
     public LayerMask enemyLayers;
     public Transform attackPoint;
 
-    public int attackDamage = 40;
-    public float attackRange = 1.1f;
+    [SerializeField] public int attackDamage = 40;
+    [SerializeField] public float attackRange = 1.1f;
+    [SerializeField] public float attackRate = 2f;
+    [SerializeField] private float nextAttackTime = 0f;
 
-    private int maxHealth = 100;
+    [SerializeField] private int maxHealth = 100;
     [SerializeField] public int currentHealth;
+    [SerializeField] public bool isBlocking = false;
 
-    public float attackRate = 2f;
-    private float nextAttackTime = 0f;
-    
     private BonfireCheckPointSaver bonfireCheckPointSaver;
     private CameraControlTrigger cameraControlTrigger;
     private GoblinBossRaum goblinBossRaum;
@@ -47,6 +47,8 @@ public class PlayerCombat : MonoBehaviour
                 nextAttackTime = Time.time + 1f/attackRate;
             }
         }
+
+        Block();
     }
 
     private void Attack()
@@ -72,16 +74,40 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
+    public void Block()
+    {
+
+        if (Input.GetButtonDown("Block") || (animator.GetBool("IdleBlock") && animator.GetBool("Block")))
+            {
+                gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                animator.SetBool("Block", true);
+                animator.SetBool("IdleBlock", true);
+                isBlocking = true;
+            }
+
+        if(Input.GetButtonUp("Block"))
+            {
+                gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+                //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+                animator.SetBool("Block", false);
+                animator.SetBool("IdleBlock", false);
+                isBlocking = false;
+            }
+    }
+
     public void TakeDamage(int damage)
     {
         if(currentHealth < 0) return; // temporary edit to disable player inputs
+
         currentHealth -= damage;
         animator.SetTrigger("Hurt");
         healthBar.SetHealth(currentHealth);
         Debug.Log("Player took Damage: " + damage);
-        if(currentHealth <= 0){
-            Die();
+
+         if(currentHealth <= 0){
+             Die();
             return;
+            
         }
     }
 
@@ -93,7 +119,6 @@ public class PlayerCombat : MonoBehaviour
         if(currentHealth >= maxHealth)
         {
             currentHealth = maxHealth;
-            
         }
         
         healthBar.SetHealth(currentHealth);

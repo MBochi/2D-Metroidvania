@@ -621,7 +621,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -288.69955, y: 200.5}
+  m_AnchoredPosition: {x: -288.69962, y: 200.5}
   m_SizeDelta: {x: -637.99, y: -426.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &502554800
@@ -25350,8 +25350,11 @@ MonoBehaviour:
   attackPoint: {fileID: 1172033212}
   attackDamage: 40
   attackRange: 1.1
-  currentHealth: 0
   attackRate: 2
+  nextAttackTime: 0
+  maxHealth: 100
+  currentHealth: 0
+  isBlocking: 0
 --- !u!114 &2020499596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25514,7 +25517,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 33.599976, y: -182.29996}
+  m_AnchoredPosition: {x: 33.599976, y: -195.72998}
   m_SizeDelta: {x: -470.12, y: -426.9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2060729847
