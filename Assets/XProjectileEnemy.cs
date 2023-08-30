@@ -14,6 +14,14 @@ public class XProjectileEnemy : MonoBehaviour
     private float colliderRadius = .4f;
     private float collisionDelayTime = .1f;
     private bool canCollide = true;
+    private bool canMove = true;
+
+    [SerializeField] private float AttackCooldownTime = 9f;
+    private float AttackTime = 1f;
+    [SerializeField] private GameObject BulletPrefab;
+    [SerializeField] int projectileDamage = 10;
+    [SerializeField] float projectileSpeed = 8f;
+    [SerializeField] int contactDamage = 20;
 
     private Vector3 RightCollisionOffset = new Vector3(.5f,0,0);
     private Vector3 LeftCollisionOffset = new Vector3(-.5f,0,0);
@@ -22,6 +30,7 @@ public class XProjectileEnemy : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        StartCoroutine(AttackCooldown());
     }
 
     // Update is called once per frame
@@ -43,7 +52,14 @@ public class XProjectileEnemy : MonoBehaviour
                 StartCoroutine(collisionDelay());
             }
         }
-        rb.velocity = new Vector2(movementDirection_x,movementDirection_y).normalized * movementSpeed;
+        if (canMove)
+        {
+            rb.velocity = new Vector2(movementDirection_x,movementDirection_y).normalized * movementSpeed;
+        }
+        else
+        {
+            rb.velocity = new Vector2(0,0);
+        }
     }
 
     private bool RightCollision()
@@ -52,7 +68,7 @@ public class XProjectileEnemy : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject != gameObject)
+            if (colliders[i].gameObject != gameObject && colliders[i].gameObject.tag != "Projectile")
             {
                 return true;
             }
@@ -66,7 +82,7 @@ public class XProjectileEnemy : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject != gameObject)
+            if (colliders[i].gameObject != gameObject && colliders[i].gameObject.tag != "Projectile")
             {
                 return true;
             }
@@ -80,7 +96,7 @@ public class XProjectileEnemy : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject != gameObject)
+            if (colliders[i].gameObject != gameObject && colliders[i].gameObject.tag != "Projectile")
             {
                 return true;
             }
@@ -94,7 +110,7 @@ public class XProjectileEnemy : MonoBehaviour
 
         for (int i = 0; i < colliders.Length; i++)
         {
-            if (colliders[i].gameObject != gameObject)
+            if (colliders[i].gameObject != gameObject && colliders[i].gameObject.tag != "Projectile")
             {
                 return true;
             }
@@ -102,9 +118,43 @@ public class XProjectileEnemy : MonoBehaviour
         return false;
     }
 
+    private void ShootXProjectiles()
+    {
+        Debug.Log("Attack");
+        GameObject bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Setup(1,1,projectileDamage,projectileSpeed);
+        bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Setup(-1,1,projectileDamage,projectileSpeed);
+        bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Setup(1,-1,projectileDamage,projectileSpeed);
+        bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Setup(-1,-1,projectileDamage,projectileSpeed);
+        StartCoroutine(AttackCooldown());
 
+    }
 
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(contactDamage);
+        }
+    }
 
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(AttackCooldownTime);
+
+        canMove = false;
+        ShootXProjectiles();
+        StartCoroutine(AttackTimer());
+    }
+
+     private IEnumerator AttackTimer()
+    {
+        yield return new WaitForSeconds(AttackTime);
+        canMove = true;
+    }
 
 
     private IEnumerator collisionDelay()
@@ -112,7 +162,7 @@ public class XProjectileEnemy : MonoBehaviour
         yield return new WaitForSeconds(collisionDelayTime);
         canCollide = true;
     }
-        
+
 
     void OnDrawGizmosSelected() 
     {
