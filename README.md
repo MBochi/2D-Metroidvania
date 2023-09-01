@@ -4,6 +4,7 @@
   Fixes/Tweaks:
     - Doors as prefabs
     - Enemies can run and float above Player when hes close
+    - Bat Enemy movement is buggy when being hit
 
   Character:
     - Character can roll
