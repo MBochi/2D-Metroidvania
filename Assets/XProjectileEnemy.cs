@@ -120,9 +120,11 @@ public class XProjectileEnemy : Enemy
         return false;
     }
 
-    private void ShootXProjectiles()
+    private IEnumerator ShootXProjectiles()
     {
         Debug.Log("Attack");
+        animator.SetTrigger("Attack");
+        yield return new WaitForSeconds(.2f);
         GameObject bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
         bullet.GetComponent<Bullet>().Setup(1,1,projectileDamage,projectileSpeed);
         bullet = Instantiate(BulletPrefab, this.transform.position, Quaternion.identity);
@@ -148,7 +150,7 @@ public class XProjectileEnemy : Enemy
         yield return new WaitForSeconds(AttackCooldownTime);
 
         canMove = false;
-        ShootXProjectiles();
+        StartCoroutine(ShootXProjectiles());
         StartCoroutine(AttackTimer());
     }
 
