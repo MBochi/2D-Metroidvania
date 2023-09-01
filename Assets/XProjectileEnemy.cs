@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class XProjectileEnemy : MonoBehaviour
+public class XProjectileEnemy : Enemy
 {
     // Start is called before the first frame update
 
     private Rigidbody2D rb;
     private float movementDirection_x = -1f;
     private float movementDirection_y = -1f;
-    [SerializeField] protected LayerMask m_WhatIsGround;
-    [SerializeField] private float movementSpeed = 1f;
+   //[SerializeField] protected LayerMask m_WhatIsGround;
+    //[SerializeField] private float movementSpeed = 1f;
     private float colliderRadius = .4f;
     private float collisionDelayTime = .1f;
     private bool canCollide = true;
@@ -29,12 +29,14 @@ public class XProjectileEnemy : MonoBehaviour
     private Vector3 BottomCollisionOffset = new Vector3(0,-.5f,0);
     void Start()
     {
+        base.Init();
         rb = GetComponent<Rigidbody2D>();
         StartCoroutine(AttackCooldown());
+        despawnTime = .75f;
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
         //transform.Translate((movementDirection.transform.position - this.transform.position).normalized * movementSpeed * Time.deltaTime);
         if(canCollide)
@@ -141,7 +143,7 @@ public class XProjectileEnemy : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackCooldown()
+    protected override IEnumerator AttackCooldown()
     {
         yield return new WaitForSeconds(AttackCooldownTime);
 
