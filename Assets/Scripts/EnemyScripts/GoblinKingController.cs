@@ -23,6 +23,7 @@ public class GoblinKingController : MonoBehaviour
     [SerializeField] private GameObject PlatformLeft;
     [SerializeField] private GameObject PlatformRight;
     private int lastPlatformChoice = -1;
+    private bool isOnPlatform = false;
 
     private SpriteRenderer sprite;
 
@@ -328,6 +329,7 @@ public class GoblinKingController : MonoBehaviour
     private void JumpToPlatform()
     {
         int platformChoice = Random.Range(0,2);
+        isOnPlatform = true;
         if (platformChoice == lastPlatformChoice)
         {
             if (platformChoice == 0) platformChoice = 1;
@@ -344,8 +346,8 @@ public class GoblinKingController : MonoBehaviour
             transform.position = PlatformRight.transform.position;
             if(m_FacingRight) Flip();
         }
-        StartCoroutine(JumpToPlatformCooldown());
         lastPlatformChoice = platformChoice;
+        StartCoroutine(JumpToPlatformCooldown());
     }
 
     private void Die()
@@ -470,6 +472,22 @@ public class GoblinKingController : MonoBehaviour
     private IEnumerator JumpDelay(){
         yield return new WaitForSeconds(.2f);
         float xJumpDirection = x_direction_to_player * 40f;
+        Debug.Log(x_direction_to_player);
+
+        if(isOnPlatform)
+        {
+            isOnPlatform = false;
+            if (lastPlatformChoice == 1 && (-10 < x_direction_to_player && x_direction_to_player < 10))
+            {
+                xJumpDirection = 300f;
+                Debug.Log("Jump from left");
+            }
+            else if (lastPlatformChoice == 0 && (-10 < x_direction_to_player && x_direction_to_player < 10 ))
+            {
+                xJumpDirection = -300f;
+                Debug.Log("Jump from right");
+            }
+        }
         ToggleMovementFreeze(false);
         rb.AddForce(new Vector2(xJumpDirection, m_JumpForce));
         //boxCollider.isTrigger = true;
