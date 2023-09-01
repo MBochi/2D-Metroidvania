@@ -62,7 +62,7 @@ public class CharacterController2D : MonoBehaviour
 	{
 		if (m_Rigidbody2D.velocity.y < _fallSpeedYDampingChangeThreshold && !CameraManager.instance.IsLerpingYDamping && !CameraManager.instance.LerpedFromPlayerFalling)
 		{
-			CameraManager.instance.LerpYDamping(true);
+			// CameraManager.instance.LerpYDamping(true);
 		}
 
 		if (m_Rigidbody2D.velocity.y >= 0f && !CameraManager.instance.IsLerpingYDamping && CameraManager.instance.LerpedFromPlayerFalling)
