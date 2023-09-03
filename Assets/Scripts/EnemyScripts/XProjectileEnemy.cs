@@ -7,8 +7,8 @@ public class XProjectileEnemy : Enemy
     // Start is called before the first frame update
 
     private Rigidbody2D rb;
-    private float movementDirection_x = -1f;
-    private float movementDirection_y = -1f;
+    [SerializeField][Range(-1,1)] private float movementDirection_x = -1f;
+    [SerializeField][Range(-1,1)] private float movementDirection_y = -1f;
    //[SerializeField] protected LayerMask m_WhatIsGround;
     //[SerializeField] private float movementSpeed = 1f;
     private float colliderRadius = .4f;
@@ -171,7 +171,7 @@ public class XProjectileEnemy : Enemy
     void OnDrawGizmosSelected() 
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine( this.transform.position - new Vector3(movementDirection_x, movementDirection_y, 1) * -1, this.transform.position);
+        Gizmos.DrawLine( this.transform.position - new Vector3(movementDirection_x, movementDirection_y, 1) * -2, this.transform.position);
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(this.transform.position + RightCollisionOffset, colliderRadius);
         Gizmos.DrawWireSphere(this.transform.position + LeftCollisionOffset, colliderRadius);

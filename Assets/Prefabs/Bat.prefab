@@ -129,11 +129,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3492983711121407706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0a2be16120e98b4fb196374023b3dd2, type: 3}
+  m_Script: {fileID: 11500000, guid: 2188d48a3ac8f1a49bdb5c5e2d62e176, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   movement_type: 0
-  movementSpeed: 2
+  movementSpeed: 3
   maxHealth: 100
   attackDamage: 20
   cliffCheck: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
     m_Bits: 0
   m_WhatIsGround:
     serializedVersion: 2
-    m_Bits: 4097
+    m_Bits: 1
   coinPrefab: {fileID: 4023325142940180430, guid: ea474f17cdf340941af89fd24467582e, type: 3}
   heartPrefab: {fileID: 1630497256263769252, guid: 99bd012994e29a746af7ddb056a405ce, type: 3}
   playerObj: {fileID: 0}

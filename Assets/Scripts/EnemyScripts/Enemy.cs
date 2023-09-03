@@ -48,7 +48,6 @@ public abstract class Enemy : MonoBehaviour
     protected float dist_to_player;
     protected float x_direction_to_player;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -62,10 +61,17 @@ public abstract class Enemy : MonoBehaviour
         playerCombat = GameObject.FindWithTag("Player").GetComponent<PlayerCombat>();
         playerObj = GameObject.FindWithTag("Player");
         currentHealth = maxHealth;
+        startPosition = this.transform.position;
+
     }
 
     public virtual void Update()
     {
+
+        if (Input.GetKeyDown("j"))
+        {
+            Respawn();
+        }
         dist_to_player = Vector2.Distance(playerObj.transform.position, transform.position);
         x_direction_to_player = playerObj.transform.position.x - transform.position.x;
 
