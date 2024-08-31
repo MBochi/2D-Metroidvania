@@ -88,7 +88,6 @@ public class PlayerCombat : MonoBehaviour
         if(Input.GetButtonUp("Block"))
             {
                 gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
-                //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
                 animator.SetBool("Block", false);
                 animator.SetBool("IdleBlock", false);
                 isBlocking = false;

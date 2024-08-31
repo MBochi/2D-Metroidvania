@@ -22,18 +22,22 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontalMove = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        if(Input.GetButtonDown("Jump"))
+        if(Input.GetButtonDown("Jump") && !crouch)
         {
             jump = true;
         }
 
-        if(Input.GetButtonDown("Crouch"))
-        {
-            crouch = true;
-        } else if (Input.GetButtonUp("Crouch"))
-        {
-            crouch = false;
-        }
+        if (Input.GetButtonDown("Crouch") && controller.m_Grounded)
+            {
+                gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                crouch = true;
+            }
+
+        if(Input.GetButtonUp("Crouch"))
+            {
+                gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+                crouch = false;
+            }
 
         MovementAnimation();
     }
@@ -60,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("AirSpeedY", 0);
         }
 
-        if(Input.GetButtonDown("Jump") && !crouch)
+        if(jump && !crouch)
         {
             animator.SetBool("Jump", true);
         }
